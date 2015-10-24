@@ -46,6 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Players\AIPlayer.cs" />
+    <Compile Include="Players\HumanPlayer.cs" />
+    <Compile Include="Players\Player.cs" />
+    <Compile Include="Poker\Cards\Card.cs" />
+    <Compile Include="Poker\Cards\Deck.cs" />
+    <Compile Include="Poker\Game.cs" />
+    <Compile Include="Poker\Round.cs" />
     <Compile Include="UI\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +85,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
