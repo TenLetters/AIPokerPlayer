@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using AIPokerPlayer.Players;
+using AIPokerPlayer.UI;
+using AIPokerPlayer.Poker.Cards;
 
 namespace AIPokerPlayer.Poker
 {
@@ -17,9 +19,11 @@ namespace AIPokerPlayer.Poker
 
         // plays this round of poker with the given players
         // removes players from the list if they have been knocked out (0 chips)
-        public void playRound(List<Player> players)
+        // updates the game UI as needed
+        public void playRound(List<Player> players, GameForm gameForm)
         {
-
+            // create a shuffled deck of cards for this round of poker
+            Deck deck = new Deck();
         }
     }
 }

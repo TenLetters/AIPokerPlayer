@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using AIPokerPlayer.Players;
+using AIPokerPlayer.UI;
 
 namespace AIPokerPlayer.Poker
 {
@@ -16,6 +17,9 @@ namespace AIPokerPlayer.Poker
         // how many rounds we have played
         // used to determine when to increase blinds
         int roundCount = 0;
+
+        // a reference to the UI of the game
+        GameForm gameForm;
 
         // keep looping through rounds until a winner is determined
         // returns the winner
