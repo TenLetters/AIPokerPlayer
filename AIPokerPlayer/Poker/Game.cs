@@ -27,7 +27,7 @@ namespace AIPokerPlayer.Poker
         {
             while(activePlayers.Count > 1)
             {
-                new Round().playRound(activePlayers);
+                //new Round().playRound(activePlayers);
             }
 
             // return the only player left in our list of active players, our winner

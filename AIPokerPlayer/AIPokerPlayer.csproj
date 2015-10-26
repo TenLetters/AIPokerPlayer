@@ -53,6 +53,11 @@
     <Compile Include="Poker\Cards\Deck.cs" />
     <Compile Include="Poker\Game.cs" />
     <Compile Include="Poker\Round.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="UI\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,18 +72,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="UI\GameForm.resx">
+      <DependentUpon>GameForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -93,7 +97,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <None Include="Resources\Playing-card-back-side-60x90.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Texas_Holdem_Poker_Table.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Playing-card-back.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Playing-card-placement.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gambling-chip-icon.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
