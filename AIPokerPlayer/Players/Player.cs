@@ -16,6 +16,12 @@ namespace AIPokerPlayer.Players
         // get the player's decision for their next move
         public abstract void requestAction();
 
+        // adds the 2 cards to the player's starting hand
+        public void addCardsToHand(List<Card> cards)
+        {
+            playerHand = new List<Card>(cards);
+        }
+
         // returns the player's chip count
         public int getChipCount()
         {
@@ -23,9 +29,23 @@ namespace AIPokerPlayer.Players
         }
 
         // increases or decreases the player's chip count depending on if the amount is positive or negative
-        public void modifyChipCount(int amount)
+        public int modifyChipCount(int amount)
         {
-            chipCount += amount;
+            int result = 0;
+
+            // check if this will put our player in negative chips
+            if (amount < 0 && chipCount < Math.Abs(amount))
+            {
+                result = chipCount;
+                chipCount = 0;
+            }
+            else
+            {
+                chipCount += amount;
+                result = chipCount;
+            }
+
+            return result;
         }
     }
 }
