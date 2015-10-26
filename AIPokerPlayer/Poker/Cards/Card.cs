@@ -8,6 +8,10 @@ namespace AIPokerPlayer.Poker.Cards
 {
     class Card
     {
+        public Card()
+        {
+
+        }
         // enum of card value
 
         // enum of card suit
