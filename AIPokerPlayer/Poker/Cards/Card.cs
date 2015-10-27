@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AIPokerPlayer.Poker.Cards
 {
-    class Card
+    public class Card
     {
         public Card()
         {

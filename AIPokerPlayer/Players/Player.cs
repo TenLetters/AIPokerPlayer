@@ -11,7 +11,14 @@ namespace AIPokerPlayer.Players
     abstract class Player
     {
         int chipCount; // the player's current chip count
+        string name;
         List<Card> playerHand; // the player's two cards held in their hand
+
+        public Player(string name, int startingChipCount)
+        {
+            this.chipCount = startingChipCount;
+            this.name = name;
+        }
 
         // get the player's decision for their next move
         public abstract void requestAction();
