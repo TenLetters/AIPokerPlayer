@@ -21,17 +21,32 @@ namespace AIPokerPlayer.Poker
         // a reference to the UI of the game
         GameForm gameForm;
 
+        // holds the starting blind amount for this game equal to the starting chip cound % 100
+        int startingBlindAmount = 0;
+
+        public Game(List<string> playerNames, int startingChipCount)
+        {
+            startingBlindAmount = startingChipCount % 100;
+        }
+
+        private void initActivePlayers()
+        { 
+             
+        }
+
         // keep looping through rounds until a winner is determined
         // returns the winner
         public Player play()
         {
+            Player roundWinner = activePlayers[0];
+
             while(activePlayers.Count > 1)
             {
-                //new Round().playRound(activePlayers);
+                roundWinner = new Round().playRound(activePlayers, gameForm, roundCount % activePlayers.Count, startingBlindAmount * (1 + roundCount/10));
             }
 
-            // return the only player left in our list of active players, our winner
-            return activePlayers[0];
+            
+            return roundWinner;
         }
 
 

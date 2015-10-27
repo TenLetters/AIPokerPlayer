@@ -8,6 +8,9 @@ namespace AIPokerPlayer.Players
 {
     class AIPlayer : Player
     {
+        public AIPlayer(string name, int startingChipCount): base(string name, int startingChipCount)
+        { }
+
         public override void requestAction()
         {
             throw new NotImplementedException();
