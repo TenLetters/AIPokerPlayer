@@ -3,6 +3,8 @@ using System.Drawing;
 
 namespace AIPokerPlayer.Poker.Cards
 {
+    // Written by Scott Boyce
+
     // enum of card value
     public enum Value { Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace };
     // enum of card suit
@@ -15,8 +17,8 @@ namespace AIPokerPlayer.Poker.Cards
         // image location relative to our bin/debug/.exe
         String imageLocation = "../../Resources/PNG-deck-cards/";
         Image myImage;
-        Value value;
-        Suit suit;
+        public Value value;
+        public Suit suit;
 
         public String getPath() { return path; }
         public Image getImage() { return myImage; }

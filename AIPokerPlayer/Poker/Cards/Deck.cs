@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace AIPokerPlayer.Poker.Cards
 {
+    // Written by Alex Ciaramella
     class Deck
     {
         // our list of cards

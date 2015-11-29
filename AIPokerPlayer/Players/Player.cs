@@ -8,6 +8,7 @@ using AIPokerPlayer.Poker.Cards;
 
 namespace AIPokerPlayer.Players
 {
+    // Written by Alex Ciaramella
     abstract class Player
     {
         int chipCount; // the player's current chip count
