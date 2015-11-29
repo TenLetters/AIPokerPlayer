@@ -51,7 +51,9 @@
     <Compile Include="Players\Player.cs" />
     <Compile Include="Poker\Cards\Card.cs" />
     <Compile Include="Poker\Cards\Deck.cs" />
+    <Compile Include="Poker\EvalResult.cs" />
     <Compile Include="Poker\Game.cs" />
+    <Compile Include="Poker\HandEvaluator.cs" />
     <Compile Include="Poker\Round.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
