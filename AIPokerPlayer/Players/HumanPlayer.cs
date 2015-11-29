@@ -8,9 +8,12 @@ namespace AIPokerPlayer.Players
 {
     class HumanPlayer : Player
     {
+
+        public HumanPlayer(string name, int startingChipCount, int position) : base(name, startingChipCount, position)
+        { }
+        
         public override void requestAction()
         {
-            
         }
     }
 }
