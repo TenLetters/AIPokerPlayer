@@ -12,10 +12,11 @@ namespace AIPokerPlayer.Players
     abstract class Player
     {
         int chipCount; // the player's current chip count
-        string name;
+        int positionOnBoard;
+        private string name;
         List<Card> playerHand; // the player's two cards held in their hand
 
-        public Player(string name, int startingChipCount)
+        public Player(string name, int startingChipCount, int position)
         {
             this.chipCount = startingChipCount;
             this.name = name;
@@ -34,6 +35,11 @@ namespace AIPokerPlayer.Players
         public int getChipCount()
         {
             return chipCount;
+        }
+
+        public string getName()
+        {
+            return name;
         }
 
         // increases or decreases the player's chip count depending on if the amount is positive or negative

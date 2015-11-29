@@ -25,15 +25,16 @@ namespace AIPokerPlayer.Poker
         // holds the starting blind amount for this game equal to the starting chip cound % 100
         int startingBlindAmount = 0;
 
-        public Game(List<string> playerNames, int startingChipCount)
+        public Game(List<Player> players)
         {
-            startingBlindAmount = startingChipCount % 100;
+            if (players.Count > 0)
+            {
+                this.activePlayers = players;
+                startingBlindAmount = players[0].getChipCount() % 100;
+                play();
+            }
         }
 
-        private void initActivePlayers()
-        { 
-             
-        }
 
         // keep looping through rounds until a winner is determined
         // returns the winner
@@ -43,7 +44,9 @@ namespace AIPokerPlayer.Poker
 
             while(activePlayers.Count > 1)
             {
+                // start a new round(hand) the location of the bigblind player is equal to the round count mod the number of active players the current big blind is equal to the startblind plus an additional starting blind for every 10 rounds played
                 roundWinner = new Round().playRound(activePlayers, gameForm, roundCount % activePlayers.Count, startingBlindAmount * (1 + roundCount/10));
+                roundCount++;
             }
 
             
