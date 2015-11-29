@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AIPokerPlayer.Poker.Cards;
+<<<<<<< HEAD
 using System.Drawing;
+=======
+>>>>>>> 0dcd0a1cd2b8261ccae75ab5ad98063741071e6c
 
 /*
 *   AIPokerPlayer.UI.GameForm
@@ -22,7 +25,10 @@ namespace AIPokerPlayer.UI
         List<Label> labelChipCount; //List of player chip count labels
         List<PictureBox> revealedCards; //The picture boxes for cards that are on the board shown to all players
         List<List<PictureBox>> playerHands; //List of each players hands (their two cards)
+<<<<<<< HEAD
         Image DEFAULT_CARDBACK = Image.FromFile("../../Resources/Playing-card-back.jpg");
+=======
+>>>>>>> 0dcd0a1cd2b8261ccae75ab5ad98063741071e6c
 
         public GameForm()
         {
@@ -102,9 +108,12 @@ namespace AIPokerPlayer.UI
             playerHand.Add(pictureBoxPEightCardTwo);
             playerHands.Add(playerHand);
 
+<<<<<<< HEAD
 
             //Mini test suite
             /*
+=======
+>>>>>>> 0dcd0a1cd2b8261ccae75ab5ad98063741071e6c
             Card test1 = new Card(Value.Ace, Suit.Clubs);
             Card test2 = new Card(Value.Eight, Suit.Diamonds);
             Card test3 = new Card(Value.Jack, Suit.Hearts);
@@ -113,6 +122,7 @@ namespace AIPokerPlayer.UI
             revealedCards[1].Image = test2.getImage();
             revealedCards[2].Image = test3.getImage();
 
+<<<<<<< HEAD
             Card test4 = new Card(Value.Two, Suit.Clubs);
             Card test5 = new Card(Value.Seven, Suit.Diamonds);
             List<Card> testHand = new List<Card>();
@@ -122,6 +132,8 @@ namespace AIPokerPlayer.UI
 
             showFlop(testHand);*/
 
+=======
+>>>>>>> 0dcd0a1cd2b8261ccae75ab5ad98063741071e6c
         }
 
         /*
@@ -158,6 +170,7 @@ namespace AIPokerPlayer.UI
         }
 
         /*
+<<<<<<< HEAD
         *   Param: int, List<Card>
         *   Shows (player index i)'s hand by updating the respective picture boxes to the images of the given cards
         *   On showing cards, should there be a next button so when multiple humans, play they don't accidently see other players?
@@ -185,11 +198,35 @@ namespace AIPokerPlayer.UI
             else
             {
                 throw new Exception("Expected no more than " + expectedHandSize + " hand size. Recieved " + hand.Count);
+=======
+        *   Param: int
+        *   Each round has 4 possible betting sessions : pre-flop, post-flop, post-turn, post-river
+        */
+        public void updateSessionVisual(int i)
+        {
+            if(i == 0)//preflop
+            {
+                //Pre-flop should be that all players recieve their hand.
+
+            }
+            else if(i == 1)//show flop
+            {
+                //showFlop();
+            }
+            else if(i == 2)//show turn
+            {
+                //showTurn();
+            }
+            else if(i == 3)//show river
+            {
+                //showRiver();
+>>>>>>> 0dcd0a1cd2b8261ccae75ab5ad98063741071e6c
             }
         }
 
         /*
         *   Param: int, List<Card>
+<<<<<<< HEAD
         *   Update the picture boxes for the first three cards revealed to all players
         */
         public void showFlop(List<Card> flop)
@@ -213,6 +250,27 @@ namespace AIPokerPlayer.UI
             else
             {
                 throw new Exception("Expected " + expectedSize + " cards for the flop. Recieved " + flop.Count);
+=======
+        *   Shows (player index i)'s hand by updating the respective picture boxes to the images of the given cards
+        *   On showing cards, should there be a next button so when multiple humans, play they don't accidently see other players?
+        */
+        public void showPlayerHand(int i, List<Card> hand)
+        {
+            List<PictureBox> playerHand = playerHands[i];
+            //playerHand[0].Image = hand.getImage();
+            //playerHand[1].Image = hand.getImage();
+        }
+
+       /*
+       *   Param: int, List<Card>
+       *   Update the picture boxes for the first three cards revealed to all players
+       */
+        public void showFlop(List<Card> flop)
+        {
+            for (int i = 0; i < flop.Count(); i++) //Reveal the first three cards
+            {
+                //revealedCards[i].Image = flop.getImage();
+>>>>>>> 0dcd0a1cd2b8261ccae75ab5ad98063741071e6c
             }
         }
 
@@ -222,6 +280,7 @@ namespace AIPokerPlayer.UI
         */
         public void showTurn(Card turn)
         {
+<<<<<<< HEAD
             if (turn != null) //The turn is the 4th card revealed. Pos: 3
             {
                 revealedCards[3].Image = turn.getImage();
@@ -230,6 +289,9 @@ namespace AIPokerPlayer.UI
             {
                 revealedCards[3].Image = DEFAULT_CARDBACK; //this should never happen
             }
+=======
+            //revealedCards[3].Image = turn.getImage(); //The turn is the 4th card revealed. Pos: 3
+>>>>>>> 0dcd0a1cd2b8261ccae75ab5ad98063741071e6c
         }
 
         /*
@@ -238,6 +300,7 @@ namespace AIPokerPlayer.UI
         */
         public void showRiver(Card river)
         {
+<<<<<<< HEAD
             if (river != null) //The river is the last card revealed. Pos: 4
             {
                 revealedCards[4].Image = river.getImage();
@@ -249,6 +312,10 @@ namespace AIPokerPlayer.UI
         }
 
 
+=======
+            //revealedCards[4].Image = turn.getImage(); //The river is the last card revealed. Pos: 4
+        }
+>>>>>>> 0dcd0a1cd2b8261ccae75ab5ad98063741071e6c
         /*
        *   Param: Player
        *   Update the current player turn to Player's name
