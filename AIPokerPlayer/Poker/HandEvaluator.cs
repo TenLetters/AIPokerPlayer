@@ -92,7 +92,7 @@ namespace AIPokerPlayer.Poker
             int i = 2;
 
             // if the set contains an ace, then we must check for 1,2,3,4,5 so we should start at 1 instead of 2
-            if (cardValues.Contains((int)Card.Value.Ace))
+            if (cardValues.Contains((int) Value.Ace))
                 i = 1;
             // check for 5 sequential cards 
             for (; i <= 10; i++)
@@ -135,7 +135,7 @@ namespace AIPokerPlayer.Poker
         {
             int pairCount = 0;
 
-            for (int i = 2; i <= (int) Card.Value.Ace; i++)
+            for (int i = 2; i <= (int) Value.Ace; i++)
             {
                 if (cardValueCounts[i] == 2)
                     pairCount++;
@@ -147,7 +147,7 @@ namespace AIPokerPlayer.Poker
         // returns true if there are exactly count cards with the same value, false otherwise
         public Boolean hasCountCards(Dictionary<int, int> cardValueCounts, int count)
         {
-            for(int i = 2; i <= (int) Card.Value.Ace; i++)
+            for(int i = 2; i <= (int) Value.Ace; i++)
             {
                 if (cardValueCounts[i] == count)
                     return true;
@@ -169,24 +169,24 @@ namespace AIPokerPlayer.Poker
             {
                 switch (card.suit)
                 {
-                    case Card.Suit.Club:
+                    case Suit.Clubs:
                         clubCount++;
                         break;
-                    case Card.Suit.Diamond:
+                    case Suit.Diamonds:
                         diamondCount++;
                         break;
-                    case Card.Suit.Heart:
+                    case Suit.Hearts:
                         heartCount++;
                         break;
-                    case Card.Suit.Spade:
+                    case Suit.Spades:
                         spadeCount++;
                         break;
                 }
             }
-            result.Add((int)Card.Suit.Club, clubCount);
-            result.Add((int)Card.Suit.Diamond, diamondCount);
-            result.Add((int)Card.Suit.Heart, heartCount);
-            result.Add((int)Card.Suit.Spade, spadeCount);
+            result.Add((int) Suit.Clubs, clubCount);
+            result.Add((int) Suit.Diamonds, diamondCount);
+            result.Add((int) Suit.Hearts, heartCount);
+            result.Add((int) Suit.Spades, spadeCount);
 
             return result;
         }
@@ -218,44 +218,44 @@ namespace AIPokerPlayer.Poker
             {
                 switch (card.value)
                 {
-                    case Card.Value.Ace:
-                        result.Add((int)Card.Value.Ace);
+                    case Value.Ace:
+                        result.Add((int) Value.Ace);
                         break;
-                    case Card.Value.King:
-                        result.Add((int)Card.Value.King);
+                    case Value.King:
+                        result.Add((int) Value.King);
                         break;
-                    case Card.Value.Queen:
-                        result.Add((int)Card.Value.Queen);
+                    case Value.Queen:
+                        result.Add((int) Value.Queen);
                         break;
-                    case Card.Value.Jack:
-                        result.Add((int)Card.Value.Jack);
+                    case Value.Jack:
+                        result.Add((int) Value.Jack);
                         break;
-                    case Card.Value.Ten:
-                        result.Add((int)Card.Value.Ten);
+                    case Value.Ten:
+                        result.Add((int) Value.Ten);
                         break;
-                    case Card.Value.Nine:
-                        result.Add((int)Card.Value.Nine);
+                    case Value.Nine:
+                        result.Add((int) Value.Nine);
                         break;
-                    case Card.Value.Eight:
-                        result.Add((int)Card.Value.Eight);
+                    case Value.Eight:
+                        result.Add((int) Value.Eight);
                         break;
-                    case Card.Value.Seven:
-                        result.Add((int)Card.Value.Seven);
+                    case Value.Seven:
+                        result.Add((int) Value.Seven);
                         break;
-                    case Card.Value.Six:
-                        result.Add((int)Card.Value.Six);
+                    case Value.Six:
+                        result.Add((int) Value.Six);
                         break;
-                    case Card.Value.Five:
-                        result.Add((int)Card.Value.Five);
+                    case Value.Five:
+                        result.Add((int) Value.Five);
                         break;
-                    case Card.Value.Four:
-                        result.Add((int)Card.Value.Four);
+                    case Value.Four:
+                        result.Add((int) Value.Four);
                         break;
-                    case Card.Value.Three:
-                        result.Add((int)Card.Value.Three);
+                    case Value.Three:
+                        result.Add((int) Value.Three);
                         break;
-                    case Card.Value.Two:
-                        result.Add((int)Card.Value.Two);
+                    case Value.Two:
+                        result.Add((int) Value.Two);
                         break;
                 }
             }
@@ -272,44 +272,44 @@ namespace AIPokerPlayer.Poker
             {
                 switch(card.value)
                 {
-                    case Card.Value.Ace:
-                         currentCardValue = (int)Card.Value.Ace;
+                    case Value.Ace:
+                         currentCardValue = (int) Value.Ace;
                          break;
-                    case Card.Value.King:
-                        currentCardValue = (int)Card.Value.King;
+                    case Value.King:
+                        currentCardValue = (int) Value.King;
                         break;
-                    case Card.Value.Queen:
-                        currentCardValue = (int)Card.Value.Queen;
+                    case Value.Queen:
+                        currentCardValue = (int) Value.Queen;
                         break;
-                    case Card.Value.Jack:
-                        currentCardValue = (int)Card.Value.Jack;
+                    case Value.Jack:
+                        currentCardValue = (int) Value.Jack;
                         break;
-                    case Card.Value.Ten:
-                        currentCardValue = (int)Card.Value.Ten;
+                    case Value.Ten:
+                        currentCardValue = (int) Value.Ten;
                         break;
-                    case Card.Value.Nine:
-                        currentCardValue = (int)Card.Value.Nine;
+                    case Value.Nine:
+                        currentCardValue = (int) Value.Nine;
                         break;
-                    case Card.Value.Eight:
-                        currentCardValue = (int)Card.Value.Eight;
+                    case Value.Eight:
+                        currentCardValue = (int) Value.Eight;
                         break;
-                    case Card.Value.Seven:
-                        currentCardValue = (int)Card.Value.Seven;
+                    case Value.Seven:
+                        currentCardValue = (int) Value.Seven;
                         break;
-                    case Card.Value.Six:
-                        currentCardValue = (int)Card.Value.Six;
+                    case Value.Six:
+                        currentCardValue = (int) Value.Six;
                         break;
-                    case Card.Value.Five:
-                        currentCardValue = (int)Card.Value.Five;
+                    case Value.Five:
+                        currentCardValue = (int) Value.Five;
                         break;
-                    case Card.Value.Four:
-                        currentCardValue = (int)Card.Value.Four;
+                    case Value.Four:
+                        currentCardValue = (int) Value.Four;
                         break;
-                    case Card.Value.Three:
-                        currentCardValue = (int)Card.Value.Three;
+                    case Value.Three:
+                        currentCardValue = (int) Value.Three;
                         break;
-                    case Card.Value.Two:
-                        currentCardValue = (int)Card.Value.Two;
+                    case Value.Two:
+                        currentCardValue = (int) Value.Two;
                         break;
                 }
 

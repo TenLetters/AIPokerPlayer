@@ -17,8 +17,8 @@ namespace AIPokerPlayer.Poker.Cards
         // image location relative to our bin/debug/.exe
         String imageLocation = "../../Resources/PNG-deck-cards/";
         Image myImage;
-        Value value;
-        Suit suit;
+        public Value value;
+        public Suit suit;
 
         public String getPath() { return path; }
         public Image getImage() { return myImage; }
