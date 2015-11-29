@@ -100,6 +100,14 @@ namespace AIPokerPlayer.UI
             playerHand.Add(pictureBoxPEightCardTwo);
             playerHands.Add(playerHand);
 
+            Card test1 = new Card(Value.Ace, Suit.Clubs);
+            Card test2 = new Card(Value.Eight, Suit.Diamonds);
+            Card test3 = new Card(Value.Jack, Suit.Hearts);
+
+            revealedCards[0].Image = test1.getImage();
+            revealedCards[1].Image = test2.getImage();
+            revealedCards[2].Image = test3.getImage();
+
         }
 
         /*
@@ -148,15 +156,15 @@ namespace AIPokerPlayer.UI
             }
             else if(i == 1)//show flop
             {
-                showFlop();
+                //showFlop();
             }
             else if(i == 2)//show turn
             {
-                showTurn();
+                //showTurn();
             }
             else if(i == 3)//show river
             {
-                showRiver();
+                //showRiver();
             }
         }
 
