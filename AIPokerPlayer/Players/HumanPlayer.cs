@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace AIPokerPlayer.Players
 {
+    // Written by Alex Ciaramella
     class HumanPlayer : Player
     {
 
