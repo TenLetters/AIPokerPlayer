@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace AIPokerPlayer.Poker.Cards
 {
+    // Written by Scott Boyce
     public class Card
     {
         // enum of card value
-        enum Value { Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace };
+        public enum Value { Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace };
         // enum of card suit
-        enum Suit { Club, Spade, Heart, Diamond };
+        public enum Suit { Club, Spade, Heart, Diamond };
         // image string
         String imageLocation;
-        Value value;
-        Suit suit;
+        public Value value;
+        public Suit suit;
 
 
         public Card(Value value, string suit)
