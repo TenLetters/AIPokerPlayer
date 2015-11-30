@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using AIPokerPlayer.Poker.Cards;
 using System.Drawing;
 using AIPokerPlayer.Players;
+using AIPokerPlayer.Poker.Moves;
+using AIPokerPlayer.Poker;
 
 /*
 *   AIPokerPlayer.UI.GameForm
@@ -108,6 +110,9 @@ namespace AIPokerPlayer.UI
             playerHand.Add(pictureBoxPEightCardTwo);
             playerHands.Add(playerHand);
 
+            numericUpDown1.Maximum = int.MaxValue;
+            numericUpDown1.Minimum = 0;
+
             //Mini test suite
             /*
             Card test1 = new Card(Value.Ace, Suit.Clubs);
@@ -133,6 +138,7 @@ namespace AIPokerPlayer.UI
             showPlayerHand(p);
             updatePlayer(p);
             */
+            //Game game = new Game()
         }
 
         /*
@@ -202,33 +208,26 @@ namespace AIPokerPlayer.UI
             //Expecting hand size of generally two cards
             int expectedHandSize = 2;
             List<Card> hand = player.getPlayerHand();
-            if (hand.Count <= expectedHandSize)//If < then show card back, if > throw exception
+            List<PictureBox> playerHand = playerHands[player.getPositionOnBoard()];
+            for (int j = 0; j < expectedHandSize; j++)
             {
-                List<PictureBox> playerHand = playerHands[player.getPositionOnBoard()];
-                for (int j = 0; j < hand.Count; j++)
+                if (hand[j] != null)
                 {
-                    if (hand[j] != null)
-                    {
-                        playerHand[j].Image = hand[j].getImage();
-                    }
-                    else
-                    {
-                        playerHand[j].Image = DEFAULT_CARDBACK;
-                    }
+                    playerHand[j].Image = hand[j].getImage();
                 }
-                playerHands[player.getPositionOnBoard()] = playerHand;
+                else
+                {
+                    playerHand[j].Image = DEFAULT_CARDBACK;
+                }
             }
-            else
-            {
-                throw new Exception("Expected no more than " + expectedHandSize + " hand size. Recieved " + hand.Count);
-            }
+            playerHands[player.getPositionOnBoard()] = playerHand;
         }
 
         /*
         *   Param: Card
         *   Update the picture boxes for the revealed cards.
         */
-        public void revealCard(Card card)
+        private void revealCard(Card card)
         {
             if (revealedCardsCount <= 4)//Clear the revealed cards otherwise
             {
@@ -242,13 +241,23 @@ namespace AIPokerPlayer.UI
         }
 
         /*
+        * Updates the cards on the board.
+        */
+        public void revealBoardCards(List<Card> cards)
+        {
+            foreach (Card card in cards)
+                revealCard(card);
+        }
+
+        /*
         *   Param:
         *   Clears the board and shows empty positions for the revealed Cards
         */
         public void clearRevealedCards()
         {
             for(int i = 0; i < revealedCards.Count; i++)
-            { 
+            {
+                revealedCards[i].Image.Dispose();
                 revealedCards[i].Image = CARD_PLACEMENT;
                 revealedCardsCount = 0;
             }
@@ -276,12 +285,13 @@ namespace AIPokerPlayer.UI
         *   Param: List<Move>
         *   Takes a list of moves which will determine what the player's options are for their turn
         */
-       /* public void setAvailableButtons(List<Move> moves)
+        public void setAvailableButtons(List<Move> moves)
         {
-            foreach(Move move in moves)
+            foreach (Move move in moves)
             {
-                if(move is Raise)
+                if (move is Raise)
                 {
+                    numericUpDown1.Value = ((Raise)move).getMinimumRaise();
                     buttonRaise.Enabled = true;
                 }
 
@@ -300,7 +310,7 @@ namespace AIPokerPlayer.UI
                     buttonFold.Enabled = true;
                 }
             }
-        }*/
+        }
 
         /*
         *   Param:
