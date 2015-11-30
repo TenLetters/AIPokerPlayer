@@ -16,14 +16,16 @@ namespace AIPokerPlayer.Poker.Cards
         // the state of the game (time for turn, river, or flop)
         int stateOfGame;
 
+        Random random = new Random();
+
         public Deck()
         {
-            deck = new List<Card>();
             // put all of the cards into the deck in order
             createOrderedDeck();
             shuffle();
             stateOfGame = 0;
         }
+       
 
         //Creates a deck ordered by each value in a suit, then moving to the next suit
         private void createOrderedDeck()
@@ -55,6 +57,16 @@ namespace AIPokerPlayer.Poker.Cards
         // reset the currentIndex to 0
         private void shuffleDeck(Random random)
         {
+<<<<<<< HEAD
+            int n = deck.Count;
+
+            for(int i = 0; i < n; i++)
+            {
+                int r = i + (int)(random.NextDouble() * (n - i));
+                Card card = deck[r];
+                deck[r] = deck[i];
+                deck[i] = card;
+=======
             List<Card> tmpDeck = new List<Card>();
             int orderedDeckSize = deck.Count;
             for (int i = 0; orderedDeckSize > 0; i++)
@@ -63,6 +75,7 @@ namespace AIPokerPlayer.Poker.Cards
                 tmpDeck.Add(deck[randomNumber]);
                 deck.RemoveAt(randomNumber);
                 orderedDeckSize = deck.Count;
+>>>>>>> middle59-master
             }
             deck = tmpDeck;
             currentIndex = 0;
@@ -74,7 +87,7 @@ namespace AIPokerPlayer.Poker.Cards
             List<Card> result = new List<Card>();
 
             // add the cards to our result
-            for (int i = 0; i < numberOfCards; i++)
+            for (int i = currentIndex; i < numberOfCards + currentIndex; i++)
             {
                 result.Add(deck[i]);
             }
