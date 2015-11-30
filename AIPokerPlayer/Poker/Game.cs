@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AIPokerPlayer.Players;
 using AIPokerPlayer.UI;
 using System.Threading;
+using System.ComponentModel;
 
 namespace AIPokerPlayer.Poker
 {
@@ -34,7 +35,7 @@ namespace AIPokerPlayer.Poker
                 gameForm = new GameForm();
                 gameForm.Show();
                 this.activePlayers = players;
-                startingBlindAmount = players[0].getChipCount() % 100;
+                startingBlindAmount = players[0].getChipCount() / 100;
                 thread.Start();
             }
         }
@@ -51,6 +52,15 @@ namespace AIPokerPlayer.Poker
                 // start a new round(hand) the location of the bigblind player is equal to the round count mod the number of active players the current big blind is equal to the startblind plus an additional starting blind for every 10 rounds played
                 roundWinner = new Round().playRound(activePlayers, gameForm, roundCount % activePlayers.Count, startingBlindAmount * (1 + roundCount/10));
                 roundCount++;
+
+                // check if anyone has reached 0 chips and remove them from the game
+                for(int i = 0; i < activePlayers.Count;)
+                {
+                    if (activePlayers[i].getChipCount() == 0)
+                        activePlayers.RemoveAt(i);
+                    else
+                        i++;                        
+                }
             }
         }
 
