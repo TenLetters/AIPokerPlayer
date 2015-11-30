@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace AIPokerPlayer.Poker.Cards
 {
+    // Written by Alex Ciaramella
     class Deck
     {
         // our list of cards
@@ -43,14 +44,14 @@ namespace AIPokerPlayer.Poker.Cards
 
             // increment our deck counter to signify we have drawn cards
             currentIndex += numberOfCards;
-            
+
             return result;
         }
 
         // returns the proper cards based on the state of the game and increments it
         public List<Card> getBoardCards()
         {
-            switch(stateOfGame)
+            switch (stateOfGame)
             {
                 case 0:
                     stateOfGame++;

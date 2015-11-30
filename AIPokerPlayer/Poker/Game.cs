@@ -9,6 +9,7 @@ using AIPokerPlayer.UI;
 
 namespace AIPokerPlayer.Poker
 {
+    // Written by Scott Boyce
     class Game
     {
         // all players who are still in the game with a chip count > 0
@@ -28,6 +29,8 @@ namespace AIPokerPlayer.Poker
         {
             if (players.Count > 0)
             {
+                GameForm gameForm = new GameForm();
+                gameForm.Show();
                 this.activePlayers = players;
                 startingBlindAmount = players[0].getChipCount() % 100;
                 play();

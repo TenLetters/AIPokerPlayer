@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 using AIPokerPlayer.Poker.Cards;
+using AIPokerPlayer.Poker.Moves;
 
 namespace AIPokerPlayer.Players
 {
-    abstract class Player
+    // Written by Alex Ciaramella
+    public abstract class Player
     {
         int chipCount; // the player's current chip count
+        int chipsInCurrentPot;
         int positionOnBoard;
         private string name;
         List<Card> playerHand; // the player's two cards held in their hand
@@ -19,10 +22,19 @@ namespace AIPokerPlayer.Players
         {
             this.chipCount = startingChipCount;
             this.name = name;
+            positionOnBoard = position;
+            chipsInCurrentPot = 0;
         }
 
         // get the player's decision for their next move
-        public abstract void requestAction();
+        public abstract Move requestAction(List<Move> possibleMoves);
+
+
+        // returns the player's hand
+        public List<Card> getPlayerHand()
+        {
+            return playerHand;
+        }
 
         // adds the 2 cards to the player's starting hand
         public void addCardsToHand(List<Card> cards)
@@ -39,6 +51,26 @@ namespace AIPokerPlayer.Players
         public string getName()
         {
             return name;
+        }
+
+        public int getPositionOnBoard()
+        {
+            return positionOnBoard;
+        }
+
+        public void addToChipsInCurrentPot(int amount)
+        {
+            this.chipsInCurrentPot += amount;
+        }
+
+        public int getChipsInCurrentPot()
+        {
+            return chipsInCurrentPot;
+        }
+
+        public void resetChipsInCurrentPot()
+        {
+            this.chipsInCurrentPot = 0;
         }
 
         // increases or decreases the player's chip count depending on if the amount is positive or negative

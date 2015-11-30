@@ -51,7 +51,14 @@
     <Compile Include="Players\Player.cs" />
     <Compile Include="Poker\Cards\Card.cs" />
     <Compile Include="Poker\Cards\Deck.cs" />
+    <Compile Include="Poker\EvalResult.cs" />
     <Compile Include="Poker\Game.cs" />
+    <Compile Include="Poker\HandEvaluator.cs" />
+    <Compile Include="Poker\Moves\Call.cs" />
+    <Compile Include="Poker\Moves\Check.cs" />
+    <Compile Include="Poker\Moves\Fold.cs" />
+    <Compile Include="Poker\Moves\Move.cs" />
+    <Compile Include="Poker\Moves\Raise.cs" />
     <Compile Include="Poker\Round.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

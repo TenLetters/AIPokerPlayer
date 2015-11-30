@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AIPokerPlayer.Poker.Cards;
+using System.Drawing;
+using AIPokerPlayer.Players;
 
 /*
 *   AIPokerPlayer.UI.GameForm
@@ -10,6 +12,7 @@ using AIPokerPlayer.Poker.Cards;
 *   Main gameboard GUI
 *   Updates all the visuals by setting images and keeping track of labels
 *   Provides the user standard actions such as hit, stay, fold
+*   Author: Mike Middleton
 */
 
 namespace AIPokerPlayer.UI
@@ -21,16 +24,21 @@ namespace AIPokerPlayer.UI
         List<Label> labelChipCount; //List of player chip count labels
         List<PictureBox> revealedCards; //The picture boxes for cards that are on the board shown to all players
         List<List<PictureBox>> playerHands; //List of each players hands (their two cards)
+        Image DEFAULT_CARDBACK = Image.FromFile("../../Resources/Playing-card-back.jpg");
+        Image CARD_PLACEMENT = Image.FromFile("../../Resources/Playing-card-placement.jpg");
+        int MAX_PLAYER_COUNT = 8;
+        int revealedCardsCount;
 
         public GameForm()
         {
             InitializeComponent();
+            revealedCardsCount = 0;
             labelPlayerNames = new List<Label>();
             labelChipCount = new List<Label>();
             revealedCards = new List<PictureBox>();
             playerHands = new List<List<PictureBox>>();
             List<PictureBox> playerHand;
-
+     
             //Add Labels to labelPlayerNames array for reference
             labelPlayerNames.Add(pOneName);
             labelPlayerNames.Add(pTwoName);
@@ -100,115 +108,160 @@ namespace AIPokerPlayer.UI
             playerHand.Add(pictureBoxPEightCardTwo);
             playerHands.Add(playerHand);
 
+            //Mini test suite
+            /*
+            Card test1 = new Card(Value.Ace, Suit.Clubs);
+            Card test2 = new Card(Value.Eight, Suit.Diamonds);
+            Card test3 = new Card(Value.Jack, Suit.Hearts);
+
+            revealCard(test1);
+            revealCard(test2);
+
+            clearRevealedCards();
+
+            revealCard(test3);
+
+            Player p = new HumanPlayer("Jim", 1000, 2);
+
+            Card test4 = new Card(Value.Two, Suit.Clubs);
+            Card test5 = new Card(Value.Seven, Suit.Diamonds);
+            List<Card> testHand = new List<Card>();
+            testHand.Add(test4);
+            testHand.Add(test5);
+            p.addCardsToHand(testHand);
+
+            showPlayerHand(p);
+            updatePlayer(p);
+            */
         }
 
         /*
-        *   Param: List<String>
-        *   Given a list of strings representing each player's name, set all labels respectively
+        *   Param: List<Player>
+        *   Updates visual info for a list of players
         */
-        public void updatePlayerNames(List<String> playerNameList)
+        public void updatePlayers(List<Player> playerList)
         {
-            for(int i=0; i < playerNameList.Count(); i++)
+            //Maximum of Eight Players
+            if (playerList.Count <= MAX_PLAYER_COUNT)
             {
-                labelPlayerNames[i].Text = playerNameList[i];
+                Player current;
+                for (int i = 0; i < playerList.Count(); i++)
+                {
+                    if (playerList[i] != null)
+                    {
+                        current = playerList[i];
+                        updatePlayer(current);
+                    }
+                    else
+                    {
+                        //this is an empty player spot, just skip over
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Expected no more than " + MAX_PLAYER_COUNT + " player list size. Recieved " + playerList.Count);
             }
         }
 
         /*
-        *   Param: int position, int chipCount
+        *   Param: Player
+        *   Updates visual info for a single player
+        */
+        public void updatePlayer(Player player)
+        {
+            updatePlayerName(player);
+            updatePlayerChipCount(player);
+        }
+
+        /*
+        *   Param: Player
+        *   Updates the UI Player Name for a given player.
+        */
+        public void updatePlayerName(Player player)
+        {
+            labelPlayerNames[player.getPositionOnBoard()].Text = player.getName();
+        }
+
+        /*
+        *   Param: Player
         *   Updates a single player's chip count to the amount specified
         */
-        public void updatePlayerChipCount(int pos, int chipCount)
+        public void updatePlayerChipCount(Player player)
         {
-            labelChipCount[pos].Text = chipCount.ToString();
+            labelChipCount[player.getPositionOnBoard()].Text = player.getChipCount().ToString();
         }
 
         /*
-        *   Param: List<int>
-        *   Given a list of integers representing each player's chip count, set all labels respectively
-        */
-        public void updateAllChipCounts(List<int> chipCountList)
-        {
-            for (int i = 0; i < chipCountList.Count(); i++)
-            {
-                updatePlayerChipCount(i, chipCountList[i]);
-            }
-        }
-
-        /*
-        *   Param: int
-        *   Each round has 4 possible betting sessions : pre-flop, post-flop, post-turn, post-river
-        */
-        public void updateSessionVisual(int i)
-        {
-            if(i == 0)//preflop
-            {
-                //Pre-flop should be that all players recieve their hand.
-
-            }
-            else if(i == 1)//show flop
-            {
-                showFlop();
-            }
-            else if(i == 2)//show turn
-            {
-                showTurn();
-            }
-            else if(i == 3)//show river
-            {
-                showRiver();
-            }
-        }
-
-        /*
-        *   Param: int, List<Card>
+        *   Param: Player
         *   Shows (player index i)'s hand by updating the respective picture boxes to the images of the given cards
         *   On showing cards, should there be a next button so when multiple humans, play they don't accidently see other players?
         */
-        public void showPlayerHand(int i, List<Card> hand)
+        public void showPlayerHand(Player player)
         {
-            List<PictureBox> playerHand = playerHands[i];
-            //playerHand[0].Image = hand.getImage();
-            //playerHand[1].Image = hand.getImage();
-        }
-
-       /*
-       *   Param: int, List<Card>
-       *   Update the picture boxes for the first three cards revealed to all players
-       */
-        public void showFlop(List<Card> flop)
-        {
-            for (int i = 0; i < flop.Count(); i++) //Reveal the first three cards
+            //Expecting hand size of generally two cards
+            int expectedHandSize = 2;
+            List<Card> hand = player.getPlayerHand();
+            if (hand.Count <= expectedHandSize)//If < then show card back, if > throw exception
             {
-                //revealedCards[i].Image = flop.getImage();
+                List<PictureBox> playerHand = playerHands[player.getPositionOnBoard()];
+                for (int j = 0; j < hand.Count; j++)
+                {
+                    if (hand[j] != null)
+                    {
+                        playerHand[j].Image = hand[j].getImage();
+                    }
+                    else
+                    {
+                        playerHand[j].Image = DEFAULT_CARDBACK;
+                    }
+                }
+                playerHands[player.getPositionOnBoard()] = playerHand;
+            }
+            else
+            {
+                throw new Exception("Expected no more than " + expectedHandSize + " hand size. Recieved " + hand.Count);
             }
         }
 
         /*
         *   Param: Card
-        *   Update the picture boxes for the turn card
+        *   Update the picture boxes for the revealed cards.
         */
-        public void showTurn(Card turn)
+        public void revealCard(Card card)
         {
-            //revealedCards[3].Image = turn.getImage(); //The turn is the 4th card revealed. Pos: 3
+            if (revealedCardsCount <= 4)//Clear the revealed cards otherwise
+            {
+                revealedCards[revealedCardsCount].Image = card.getImage();
+                revealedCardsCount++;
+            }
+            else
+            {
+                clearRevealedCards();
+            }
         }
 
         /*
-        *   Param: Card
-        *   Update the picture boxes for the river card
+        *   Param:
+        *   Clears the board and shows empty positions for the revealed Cards
         */
-        public void showRiver(Card river)
+        public void clearRevealedCards()
         {
-            //revealedCards[4].Image = turn.getImage(); //The river is the last card revealed. Pos: 4
+            for(int i = 0; i < revealedCards.Count; i++)
+            { 
+                revealedCards[i].Image = CARD_PLACEMENT;
+                revealedCardsCount = 0;
+            }
         }
+
         /*
        *   Param: Player
        *   Update the current player turn to Player's name
        */
-        /*public void setPlayerTurn(Player p)
+        public void setPlayerTurn(Player player)
         {
-            labelPlayerNameTurn.Text = p.getName();
-        }*/
+            labelPlayerNameTurn.Text = player.getName();
+        }
 
         /*
         *   Param: int
@@ -216,7 +269,49 @@ namespace AIPokerPlayer.UI
         */
         public void setRound(int i)
         {
-            labelRoundCount.Text = i.ToString();   
+            labelRoundCount.Text = i.ToString();
+        }
+
+        /*
+        *   Param: List<Move>
+        *   Takes a list of moves which will determine what the player's options are for their turn
+        */
+       /* public void setAvailableButtons(List<Move> moves)
+        {
+            foreach(Move move in moves)
+            {
+                if(move is Raise)
+                {
+                    buttonRaise.Enabled = true;
+                }
+
+                if (move is Call)
+                {
+                    buttonCall.Enabled = true;
+                }
+
+                if (move is Check)
+                {
+                    buttonCheck.Enabled = true;
+                }
+
+                if (move is Fold)
+                {
+                    buttonFold.Enabled = true;
+                }
+            }
+        }*/
+
+        /*
+        *   Param:
+        *   Disable all four buttons: Check, Fold, Call, Raise
+        */
+        public void disableAllButtons()
+        {
+            buttonRaise.Enabled = false;
+            buttonCall.Enabled = false;
+            buttonCheck.Enabled = false;
+            buttonFold.Enabled = false;
         }
 
         private void GameForm_Load(object sender, EventArgs e)
