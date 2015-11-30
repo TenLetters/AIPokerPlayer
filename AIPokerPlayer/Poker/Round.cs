@@ -32,6 +32,7 @@ namespace AIPokerPlayer.Poker
 
             // create a shuffled deck of cards for this round of poker
             Deck deck = new Deck();
+            
 
             // calculate the blinds and add them to the pot
             int potAmount = calculateBlinds(players, indexOfBigBlindPlayer, bigBlindAmount);
@@ -43,6 +44,7 @@ namespace AIPokerPlayer.Poker
             // each round has 4 possible betting sessions : pre-flop, post-flop, post-turn, post-river
             for(int i = 0; i < 4; i++)
             {
+                System.Threading.Thread.Sleep(1000);
                 // check to make sure there is atleast 2 players who havent folded yet or else we have a winner
                 int remainingPlayers = players.Count - foldedPlayersPositions.Count;
                 if (remainingPlayers > 1)
