@@ -22,6 +22,7 @@ namespace AIPokerPlayer.Players
         {
             this.chipCount = startingChipCount;
             this.name = name;
+            positionOnBoard = position;
             chipsInCurrentPot = 0;
         }
 
@@ -45,6 +46,11 @@ namespace AIPokerPlayer.Players
         public int getChipCount()
         {
             return chipCount;
+        }
+
+        public int getPositionOnBoard()
+        {
+            return positionOnBoard;
         }
 
         public string getName()
