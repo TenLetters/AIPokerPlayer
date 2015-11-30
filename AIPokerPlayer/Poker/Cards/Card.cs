@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 
 namespace AIPokerPlayer.Poker.Cards
 {
@@ -22,14 +23,18 @@ namespace AIPokerPlayer.Poker.Cards
 
         public String getPath() { return path; }
         public Image getImage() { return myImage; }
-        
+
 
         public Card(Value value, Suit suit)
         {
             this.value = value;
             this.suit = suit;
             imageLocation += value + "_of_" + suit + ".png";
-            myImage = Image.FromFile(imageLocation);
+            using (FileStream myStream = new FileStream(imageLocation, FileMode.Open))
+            {
+                myImage = Image.FromStream(myStream);
+            }
+            //myImage = CreateNonIndexedImage(imageLocation);
         }
     }
 
