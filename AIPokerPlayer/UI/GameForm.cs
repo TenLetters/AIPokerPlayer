@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using AIPokerPlayer.Poker.Cards;
 using System.Drawing;
 using AIPokerPlayer.Players;
+using AIPokerPlayer.Poker.Moves;
+using AIPokerPlayer.Poker;
 
 /*
 *   AIPokerPlayer.UI.GameForm
@@ -133,6 +135,7 @@ namespace AIPokerPlayer.UI
             showPlayerHand(p);
             updatePlayer(p);
             */
+            //Game game = new Game()
         }
 
         /*
@@ -228,7 +231,7 @@ namespace AIPokerPlayer.UI
         *   Param: Card
         *   Update the picture boxes for the revealed cards.
         */
-        public void revealCard(Card card)
+        private void revealCard(Card card)
         {
             if (revealedCardsCount <= 4)//Clear the revealed cards otherwise
             {
@@ -239,6 +242,15 @@ namespace AIPokerPlayer.UI
             {
                 clearRevealedCards();
             }
+        }
+
+        /*
+        * Updates the cards on the board.
+        */
+        public void revealBoardCards(List<Card> cards)
+        {
+            foreach (Card card in cards)
+                revealCard(card);
         }
 
         /*

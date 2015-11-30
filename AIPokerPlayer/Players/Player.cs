@@ -58,11 +58,6 @@ namespace AIPokerPlayer.Players
             return name;
         }
 
-        public int getPositionOnBoard()
-        {
-            return positionOnBoard;
-        }
-
         public void addToChipsInCurrentPot(int amount)
         {
             this.chipsInCurrentPot += amount;

@@ -92,8 +92,8 @@ namespace AIPokerPlayer.Poker
 
 
             // update UI
-            gameForm.updatePlayerChipCount(players[indexOfBigBlindPlayer], players[indexOfBigBlindPlayer].getChipCount());
-            gameForm.updatePlayerChipCount(players[indexOfSmallBlindPlayer], players[indexOfSmallBlindPlayer].getChipCount());
+            gameForm.updatePlayerChipCount(players[indexOfBigBlindPlayer]);
+            gameForm.updatePlayerChipCount(players[indexOfSmallBlindPlayer]);
             return result;
         }
 
@@ -136,7 +136,7 @@ namespace AIPokerPlayer.Poker
                     if (!foldedPlayersPositions.Contains(i))
                     {
                         // update Ui to show player's cards
-                        gameForm.showPlayerHand(players[i], players[i].getPlayerHand());
+                        gameForm.showPlayerHand(players[i]);
 
                         // check possible moves for the player
                         List<Move> possibleMoves = new List<Move>();
@@ -159,9 +159,9 @@ namespace AIPokerPlayer.Poker
                         // can only check if your chips in pot = maximum contribution
                         if (players[i].getChipsInCurrentPot() == highestChipsInPot)
                             possibleMoves.Add(new Check());
-                        
-                        // Update the UI with the possible moves for the player
 
+                        // Update the UI with the possible moves for the player
+                        gameForm.setAvailableButtons(possibleMoves);
 
                         // get the players move
                         Move selectedMove = players[i].requestAction(possibleMoves);
@@ -207,7 +207,7 @@ namespace AIPokerPlayer.Poker
         private void progressGameState(List<Player> players, Deck deck)
         {
             List<Card> boardCards = deck.getBoardCards();
-            gameForm.showBoardCards(boardCards);
+            gameForm.revealBoardCards(boardCards);
 
             foreach (Player player in players)
                 player.addCardsToHand(boardCards);
