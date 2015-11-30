@@ -34,6 +34,7 @@ namespace AIPokerPlayer.Poker
                 Thread thread = new Thread(this.play);
                 gameForm = new GameForm();
                 gameForm.Show();
+                gameForm.updatePlayers(players);
                 this.activePlayers = players;
                 startingBlindAmount = players[0].getChipCount() / 100;
                 thread.Start();
