@@ -130,12 +130,12 @@ namespace AIPokerPlayer
         private void StartGame_Click(object sender, EventArgs e)
         {
             finalizeSettings();
+            this.Hide();
             //Pass 'this' to the next controller object
             Game game = new Game(players);
 
             //GameForm gameForm = new GameForm();
             //gameForm.Show();
-            this.Hide();
         }
 
         //Player One Radio Events

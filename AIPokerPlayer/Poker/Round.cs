@@ -67,6 +67,7 @@ namespace AIPokerPlayer.Poker
             winner.modifyChipCount(potAmount);
 
             gameForm.updatePlayerChipCount(winner);
+            gameForm.clearRevealedCards();
             return winner;  
         }
         
@@ -102,7 +103,13 @@ namespace AIPokerPlayer.Poker
         private int findPlayer(List<Player> players, int indexOfKnownPlayer, int seatsAwayFromKnownPlayer)
         {
             // move over seatsAwayFromPlayer and then use modulus to adjust the number to be between 0-players.count - 1 for a valid seat position
-            return (indexOfKnownPlayer + seatsAwayFromKnownPlayer) % players.Count;
+            int position = indexOfKnownPlayer + seatsAwayFromKnownPlayer;
+            // modulus operator only works on positive nunbers
+            while(position < 0)
+            {
+                position += players.Count - 1;
+            }
+            return position % (players.Count - 1);
         }
 
         // gives each player in the list 2 cards for their hand
@@ -110,7 +117,7 @@ namespace AIPokerPlayer.Poker
         {
             foreach(Player player in players)
             {
-                player.addCardsToHand(deck.getNextHand());
+                player.addStartingCardsToHand(deck.getNextHand());
             }
         }
 
@@ -120,8 +127,6 @@ namespace AIPokerPlayer.Poker
             // keep track of who is last to move which will change if anyone raises
             int lastToMove = indexOfBigBlindPlayer;
             Boolean wasThereARaise = false;
-            // keep track of how many players have made a move this turn
-            int moveCount = 0;
 
             Boolean done = false;
 
@@ -130,7 +135,7 @@ namespace AIPokerPlayer.Poker
             {
                 int playersFoldedThisRound = 0;
                 // loop through all moves
-                for (int i = findPlayer(players, indexOfBigBlindPlayer, 1); moveCount < remainingPlayers; i++)
+                for (int i = findPlayer(players, indexOfBigBlindPlayer, 1); i < remainingPlayers - 1; i++)
                 {
                     // check if this player has already folded
                     if (!foldedPlayersPositions.Contains(i))
@@ -164,7 +169,7 @@ namespace AIPokerPlayer.Poker
                         gameForm.setAvailableButtons(possibleMoves);
 
                         // get the players move
-                        Move selectedMove = players[i].requestAction(possibleMoves);
+                        Move selectedMove = null; // = players[i].requestAction(possibleMoves);
                         if (selectedMove is Fold)
                         {
                             // if fold, add to folded player list, increment playersFoldedThisRound
@@ -193,7 +198,6 @@ namespace AIPokerPlayer.Poker
 
                         }
                         // if check, do nothing
-                        moveCount++;
                     }
                 }
                 remainingPlayers -= playersFoldedThisRound;

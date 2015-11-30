@@ -24,6 +24,7 @@ namespace AIPokerPlayer.Players
             this.name = name;
             positionOnBoard = position;
             chipsInCurrentPot = 0;
+            playerHand = new List<Card>();
         }
 
         // get the player's decision for their next move
@@ -36,10 +37,17 @@ namespace AIPokerPlayer.Players
             return playerHand;
         }
 
-        // adds the 2 cards to the player's starting hand
+        // adds the cards to the player's hand
         public void addCardsToHand(List<Card> cards)
         {
-            playerHand = new List<Card>(cards);
+            playerHand.AddRange(cards);
+        }
+
+        // add the initial two cards to the player's hand
+        public void addStartingCardsToHand(List<Card> cards)
+        {
+            playerHand = new List<Card>();
+            addCardsToHand(cards);
         }
 
         // returns the player's chip count
