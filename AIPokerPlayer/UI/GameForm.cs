@@ -195,7 +195,9 @@ namespace AIPokerPlayer.UI
         */
         public void updatePlayerChipCount(Player player)
         {
-            labelChipCount[player.getPositionOnBoard()].Text = player.getChipCount().ToString();
+            this.Invoke((MethodInvoker)delegate {
+                labelChipCount[player.getPositionOnBoard()].Text = player.getChipCount().ToString(); // runs on UI thread
+            });
         }
 
         /*
@@ -205,22 +207,39 @@ namespace AIPokerPlayer.UI
         */
         public void showPlayerHand(Player player)
         {
-            //Expecting hand size of generally two cards
-            int expectedHandSize = 2;
-            List<Card> hand = player.getPlayerHand();
-            List<PictureBox> playerHand = playerHands[player.getPositionOnBoard()];
-            for (int j = 0; j < expectedHandSize; j++)
+            this.Invoke((MethodInvoker)delegate
             {
-                if (hand[j] != null)
+                hidePlayerHands();
+                //Expecting hand size of generally two cards
+                int expectedHandSize = 2;
+                List<Card> hand = player.getPlayerHand();
+                List<PictureBox> playerHand = playerHands[player.getPositionOnBoard()];
+                for (int j = 0; j < expectedHandSize; j++)
                 {
-                    playerHand[j].Image = hand[j].getImage();
+                    if (hand[j] != null)
+                    {
+                        playerHand[j].Image = hand[j].getImage();
+                    }
+                    else
+                    {
+                        playerHand[j].Image = DEFAULT_CARDBACK;
+                    }
                 }
-                else
-                {
-                    playerHand[j].Image = DEFAULT_CARDBACK;
-                }
+                playerHands[player.getPositionOnBoard()] = playerHand;
+            });
+        }
+
+        /*
+       *   Param:
+       *   Hide all player hands
+       */
+        public void hidePlayerHands()
+        {
+            for (int j = 0; j < MAX_PLAYER_COUNT; j++)
+            {
+                playerHands[j][0].Image = DEFAULT_CARDBACK;
+                playerHands[j][1].Image = DEFAULT_CARDBACK;
             }
-            playerHands[player.getPositionOnBoard()] = playerHand;
         }
 
         /*
@@ -229,15 +248,18 @@ namespace AIPokerPlayer.UI
         */
         private void revealCard(Card card)
         {
-            if (revealedCardsCount <= 4)//Clear the revealed cards otherwise
+            this.Invoke((MethodInvoker)delegate
             {
-                revealedCards[revealedCardsCount].Image = card.getImage();
-                revealedCardsCount++;
-            }
-            else
-            {
-                clearRevealedCards();
-            }
+                if (revealedCardsCount <= 4)//Clear the revealed cards otherwise
+                {
+                    revealedCards[revealedCardsCount].Image = card.getImage();
+                    revealedCardsCount++;
+                }
+                else
+                {
+                    clearRevealedCards();
+                }
+            });
         }
 
         /*
@@ -245,8 +267,11 @@ namespace AIPokerPlayer.UI
         */
         public void revealBoardCards(List<Card> cards)
         {
-            foreach (Card card in cards)
+            this.Invoke((MethodInvoker)delegate
+            {
+                foreach (Card card in cards)
                 revealCard(card);
+            });
         }
 
         /*
@@ -255,11 +280,14 @@ namespace AIPokerPlayer.UI
         */
         public void clearRevealedCards()
         {
-            for(int i = 0; i < revealedCards.Count; i++)
+            this.Invoke((MethodInvoker)delegate
             {
-                revealedCards[i].Image = CARD_PLACEMENT;
-                revealedCardsCount = 0;
-            }
+                for (int i = 0; i < revealedCards.Count; i++)
+                {
+                    revealedCards[i].Image = CARD_PLACEMENT;
+                    revealedCardsCount = 0;
+                }
+            });
         }
 
         /*
@@ -268,7 +296,10 @@ namespace AIPokerPlayer.UI
        */
         public void setPlayerTurn(Player player)
         {
-            labelPlayerNameTurn.Text = player.getName();
+            this.Invoke((MethodInvoker)delegate
+            {
+                labelPlayerNameTurn.Text = player.getName();
+            });
         }
 
         /*
@@ -290,23 +321,34 @@ namespace AIPokerPlayer.UI
             {
                 if (move is Raise)
                 {
-                    numericUpDown1.Value = ((Raise)move).getMinimumRaise();
-                    buttonRaise.Enabled = true;
+                    this.Invoke((MethodInvoker)delegate {
+                        numericUpDown1.Value = ((Raise)move).getMinimumRaise();
+                        buttonRaise.Enabled = true;
+                    });
                 }
 
                 if (move is Call)
                 {
-                    buttonCall.Enabled = true;
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        buttonCall.Enabled = true;
+                    });
                 }
 
                 if (move is Check)
                 {
-                    buttonCheck.Enabled = true;
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        buttonCheck.Enabled = true;
+                    });
                 }
 
                 if (move is Fold)
                 {
-                    buttonFold.Enabled = true;
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        buttonFold.Enabled = true;
+                    });
                 }
             }
         }

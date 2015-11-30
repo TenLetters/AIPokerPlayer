@@ -95,7 +95,7 @@ namespace AIPokerPlayer.Players
             else
             {
                 chipCount += amount;
-                result = chipCount;
+                result = Math.Abs(amount);
             }
 
             return result;
