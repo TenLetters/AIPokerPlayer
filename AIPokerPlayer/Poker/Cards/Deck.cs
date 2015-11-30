@@ -28,7 +28,10 @@ namespace AIPokerPlayer.Poker.Cards
         // reset the currentIndex to 0
         private void shuffle()
         {
-
+            for(int i = 0; i < 52; i++)
+            {
+                deck.Add(new Card(Value.Ace, Suit.Spades));
+            }
         }
 
         // returns the next n cards from the top of the deck

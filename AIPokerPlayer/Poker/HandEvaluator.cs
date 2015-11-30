@@ -135,10 +135,11 @@ namespace AIPokerPlayer.Poker
         {
             int pairCount = 0;
 
-            for (int i = 2; i <= (int) Value.Ace; i++)
+            for (int i = 2; i <= (int)Value.Ace; i++)
             {
-                if (cardValueCounts[i] == 2)
-                    pairCount++;
+                if (cardValueCounts.ContainsKey(i))
+                    if (cardValueCounts[i] == 2)
+                        pairCount++;
             }
 
             return pairCount >= 2;
@@ -147,10 +148,11 @@ namespace AIPokerPlayer.Poker
         // returns true if there are exactly count cards with the same value, false otherwise
         public Boolean hasCountCards(Dictionary<int, int> cardValueCounts, int count)
         {
-            for(int i = 2; i <= (int) Value.Ace; i++)
+            for (int i = 2; i <= (int)Value.Ace; i++)
             {
-                if (cardValueCounts[i] == count)
-                    return true;
+                if (cardValueCounts.ContainsKey(i))
+                    if (cardValueCounts[i] == count)
+                        return true;
             }
 
             return false;
