@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AIPokerPlayer.Poker.Moves
 {
-    class Move
+    public class Move
     {
     }
 }

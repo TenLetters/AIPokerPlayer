@@ -10,7 +10,7 @@ using AIPokerPlayer.Poker.Moves;
 namespace AIPokerPlayer.Players
 {
     // Written by Alex Ciaramella
-    abstract class Player
+    public abstract class Player
     {
         int chipCount; // the player's current chip count
         int chipsInCurrentPot;
@@ -22,6 +22,7 @@ namespace AIPokerPlayer.Players
         {
             this.chipCount = startingChipCount;
             this.name = name;
+            positionOnBoard = position;
             chipsInCurrentPot = 0;
         }
 
@@ -50,6 +51,11 @@ namespace AIPokerPlayer.Players
         public string getName()
         {
             return name;
+        }
+
+        public int getPositionOnBoard()
+        {
+            return positionOnBoard;
         }
 
         public void addToChipsInCurrentPot(int amount)
