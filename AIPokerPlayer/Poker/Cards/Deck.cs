@@ -16,21 +16,58 @@ namespace AIPokerPlayer.Poker.Cards
         // the state of the game (time for turn, river, or flop)
         int stateOfGame;
 
+        Random random = new Random();
+
         public Deck()
         {
-            deck = new List<Card>();
             // put all of the cards into the deck in order
+            createOrderedDeck();
             shuffle();
             stateOfGame = 0;
+        }
+       
+
+        //Creates a deck ordered by each value in a suit, then moving to the next suit
+        private void createOrderedDeck()
+        {
+            deck = new List<Card>();
+
+            foreach (Suit enumSuit in Enum.GetValues(typeof(Suit)))
+            {
+                foreach (Value enumValue in Enum.GetValues(typeof(Value)))
+                {
+                    deck.Add(new Card(enumValue, enumSuit));
+                }
+            }
+        }
+
+        //shuffles the deck by using Time-based Random
+        private void shuffle()
+        {
+            Random random = new Random();
+            shuffleDeck(random);
+        }
+
+        //Overloaded to allow shuffling a deck given seed value, for testing purposes
+        private void shuffle(int seed)
+        {
+            Random random = new Random(seed);
+            shuffleDeck(random);
         }
 
         // shuffle the deck of cards using the Fisher-Yates Shuffle method
         // reset the currentIndex to 0
-        private void shuffle()
+        private void shuffleDeck(Random random)
         {
-            for(int i = 0; i < 52; i++)
+            int n = deck.Count;
+
+            for (int i = 0; i < n; i++)
             {
-                deck.Add(new Card(Value.Ace, Suit.Spades));
+                int r = i + (int)(random.NextDouble() * (n - i));
+                Card card = deck[r];
+                deck[r] = deck[i];
+                deck[i] = card;
+
             }
         }
 
@@ -40,7 +77,7 @@ namespace AIPokerPlayer.Poker.Cards
             List<Card> result = new List<Card>();
 
             // add the cards to our result
-            for (int i = 0; i < numberOfCards; i++)
+            for (int i = currentIndex; i < numberOfCards + currentIndex; i++)
             {
                 result.Add(deck[i]);
             }
