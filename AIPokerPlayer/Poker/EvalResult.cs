@@ -27,5 +27,15 @@ namespace AIPokerPlayer.Poker
         {
             this.handValue = handValue;
         }
+
+        public int getHandValue()
+        {
+            return handValue;
+        }
+
+        public int getHighCard()
+        {
+            return highCard;
+        }
     }
 }
