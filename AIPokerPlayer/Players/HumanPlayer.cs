@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AIPokerPlayer.Poker.Moves;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,9 @@ namespace AIPokerPlayer.Players
         public HumanPlayer(string name, int startingChipCount, int position) : base(name, startingChipCount, position)
         { }
         
-        public override void requestAction()
+        public override Move requestAction(List<Move> possibleMoves)
         {
+            throw new NotImplementedException();
         }
     }
 }

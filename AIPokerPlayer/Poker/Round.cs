@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AIPokerPlayer.Players;
 using AIPokerPlayer.UI;
 using AIPokerPlayer.Poker.Cards;
+using AIPokerPlayer.Poker.Moves;
 
 namespace AIPokerPlayer.Poker
 {
@@ -15,7 +16,8 @@ namespace AIPokerPlayer.Poker
     class Round
     {
 
-        private HandEvaluator handEval;
+        private HandEvaluator handEval = new HandEvaluator();
+        private int highestChipsInPot;
 
         // plays this round of poker with the given players
         // removes players from the list if they have been knocked out (0 chips)
@@ -30,6 +32,7 @@ namespace AIPokerPlayer.Poker
 
             // calculate the blinds and add them to the pot
             int potAmount = calculateBlinds(players, indexOfBigBlindPlayer, bigBlindAmount);
+            highestChipsInPot = 0;
 
             // give each player their two starting cards
             dealStartingHands(players, deck);
@@ -67,8 +70,12 @@ namespace AIPokerPlayer.Poker
             int indexOfSmallBlindPlayer = findPlayer(players, indexOfBigBlindPlayer, -1);
 
             // take the small and big blinds from the players
-            result += players[indexOfBigBlindPlayer].modifyChipCount(bigBlindAmount);
-            result += players[indexOfSmallBlindPlayer].modifyChipCount(smallBlindAmount);
+            result += players[indexOfBigBlindPlayer].modifyChipCount(-bigBlindAmount);
+            players[indexOfBigBlindPlayer].addToChipsInCurrentPot(bigBlindAmount);
+            // the big blind is the most chips by any player in the pot to start
+            highestChipsInPot = bigBlindAmount;
+            result += players[indexOfSmallBlindPlayer].modifyChipCount(-smallBlindAmount);
+            players[indexOfSmallBlindPlayer].addToChipsInCurrentPot(smallBlindAmount);
 
             return result;
         }
@@ -111,13 +118,52 @@ namespace AIPokerPlayer.Poker
                     // check if this player has already folded
                     if (!foldedPlayersPositions.Contains(i))
                     {
+                        // check possible moves for the player
+                        List<Move> possibleMoves = new List<Move>();
+                        // folding is always possible
+                        possibleMoves.Add(new Fold());
+                        // can only raise if your chip count > minimum raise amount
+                        // minimum raise amount is 1 chip (current leading contribution - player contribution = call amount; must have at least that many chips to raise)
+                        if (players[i].getChipCount() - highestChipsInPot + players[i].getChipsInCurrentPot() > 0)
+                            possibleMoves.Add(new Raise(players[i].getChipCount() - highestChipsInPot));
+                        // can only call if your chips > call amount and your contribution != max
+                        if (players[i].getChipCount() - highestChipsInPot + players[i].getChipsInCurrentPot() > 0 && players[i].getChipsInCurrentPot() != highestChipsInPot)
+                            possibleMoves.Add(new Call());
+                        // can only check if your chips in pot = maximum contribution
+                        if (players[i].getChipsInCurrentPot() == highestChipsInPot)
+                            possibleMoves.Add(new Check());
+                        
+
                         // get the players move
-                        players[i].requestAction();
+                        Move selectedMove = players[i].requestAction(possibleMoves);
+                        if (selectedMove is Fold)
+                        {
+                            // if fold, add to folded player list, increment playersFoldedThisRound
+                            foldedPlayersPositions.Add(i);
+                            playersFoldedThisRound++;
+                        }
+                        else if (selectedMove is Raise)
+                        {
+                            // if raise, take bet and add to pot
+                            int raiseAmount = ((Raise)selectedMove).getRaiseAmount();
+                            players[i].modifyChipCount(-raiseAmount);
+                            players[i].addToChipsInCurrentPot(raiseAmount);
+                            // update the pot contribution leader for this round
+                            highestChipsInPot = players[i].getChipsInCurrentPot();
+                            //change last to move to this player
+                            lastToMove = i;
+                            // update raise boolean
+                            wasThereARaise = true;
+                        }
+                        else if (selectedMove is Call)
+                        {
+                            // if call, take bet and add to pot
+                            int callAmount = highestChipsInPot - players[i].getChipsInCurrentPot();
+                            players[i].modifyChipCount(-callAmount);
+                            players[i].addToChipsInCurrentPot(callAmount);
+
+                        }
                         // if check, do nothing
-                        // if fold, add to folded player list, increment playersFoldedThisRound
-                        playersFoldedThisRound++;
-                        // if raise, take bet and add to pot, set last to move to this player, wasThereARaise = true
-                        // if call, take bet and add to pot
                         moveCount++;
                     }
                 }
@@ -140,8 +186,17 @@ namespace AIPokerPlayer.Poker
         // determines which hand is the strong from the given player lists
         private Player determineWinner(List<Player> players, List<int> folderPlayerPositions)
         {
+
+            // check if only one player remains
+            if(players.Count == folderPlayerPositions.Count - 1)
+            {
+                for (int i = 0; i < players.Count; i++)
+                    if (!folderPlayerPositions.Contains(i))
+                        return players[i];
+            }
+
             // keep track of the current best hand
-            Player winner = null;
+            Player winner = players[0];
 
             // check all player's cards for the best hand
             for(int i = 1; i < players.Count; i++)
@@ -160,6 +215,22 @@ namespace AIPokerPlayer.Poker
         // returns the player who has the stronger hand between the two
         private Player compareHands(Player playerOne, Player playerTwo)
         {
+            EvalResult playerOneResult = handEval.evaluateHand(playerOne.getPlayerHand());
+            EvalResult playerTwoResult = handEval.evaluateHand(playerTwo.getPlayerHand());
+
+            // the player with the higher move result wins
+            if(playerOneResult.getHandValue() != playerTwoResult.getHandValue())
+            {
+                if(playerTwoResult.getHandValue() > playerOneResult.getHandValue())
+                    return playerTwo;
+            }
+            else // in the case of a tie in hand values, compare high card
+            {
+                if (playerTwoResult.getHighCard() > playerOneResult.getHighCard())
+                    return playerTwo;
+            }
+
+            // otherwise player one's value was better so he/she wins
             return playerOne;
         }
     }
