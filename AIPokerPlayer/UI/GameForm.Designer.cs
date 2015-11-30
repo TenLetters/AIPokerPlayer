@@ -31,16 +31,16 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameForm));
             this.labelPlayerTurn = new System.Windows.Forms.Label();
             this.labelPlayerNameTurn = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.buttonCheck = new System.Windows.Forms.Button();
+            this.buttonFold = new System.Windows.Forms.Button();
+            this.buttonCall = new System.Windows.Forms.Button();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.newGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.button4 = new System.Windows.Forms.Button();
+            this.buttonRaise = new System.Windows.Forms.Button();
             this.pOneName = new System.Windows.Forms.Label();
             this.pTwoName = new System.Windows.Forms.Label();
             this.pThreeName = new System.Windows.Forms.Label();
@@ -145,32 +145,32 @@
             this.labelPlayerNameTurn.TabIndex = 1;
             this.labelPlayerNameTurn.Text = "turnPlaceHolder";
             // 
-            // button1
+            // buttonCheck
             // 
-            this.button1.Location = new System.Drawing.Point(224, 500);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.buttonCheck.Location = new System.Drawing.Point(224, 500);
+            this.buttonCheck.Name = "buttonCheck";
+            this.buttonCheck.Size = new System.Drawing.Size(75, 23);
+            this.buttonCheck.TabIndex = 2;
+            this.buttonCheck.Text = "Check";
+            this.buttonCheck.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // buttonFold
             // 
-            this.button2.Location = new System.Drawing.Point(314, 500);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
+            this.buttonFold.Location = new System.Drawing.Point(314, 500);
+            this.buttonFold.Name = "buttonFold";
+            this.buttonFold.Size = new System.Drawing.Size(75, 23);
+            this.buttonFold.TabIndex = 3;
+            this.buttonFold.Text = "Fold";
+            this.buttonFold.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // buttonCall
             // 
-            this.button3.Location = new System.Drawing.Point(404, 500);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
+            this.buttonCall.Location = new System.Drawing.Point(404, 500);
+            this.buttonCall.Name = "buttonCall";
+            this.buttonCall.Size = new System.Drawing.Size(75, 23);
+            this.buttonCall.TabIndex = 4;
+            this.buttonCall.Text = "Call";
+            this.buttonCall.UseVisualStyleBackColor = true;
             // 
             // printPreviewDialog1
             // 
@@ -225,14 +225,14 @@
             this.numericUpDown1.TabIndex = 9;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
-            // button4
+            // buttonRaise
             // 
-            this.button4.Location = new System.Drawing.Point(682, 500);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 10;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
+            this.buttonRaise.Location = new System.Drawing.Point(682, 500);
+            this.buttonRaise.Name = "buttonRaise";
+            this.buttonRaise.Size = new System.Drawing.Size(75, 23);
+            this.buttonRaise.TabIndex = 10;
+            this.buttonRaise.Text = "Raise";
+            this.buttonRaise.UseVisualStyleBackColor = true;
             // 
             // pOneName
             // 
@@ -785,13 +785,13 @@
             this.Controls.Add(this.pTwoName);
             this.Controls.Add(this.pOneName);
             this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.buttonRaise);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonCall);
+            this.Controls.Add(this.buttonFold);
+            this.Controls.Add(this.buttonCheck);
             this.Controls.Add(this.labelPlayerNameTurn);
             this.Controls.Add(this.labelPlayerTurn);
             this.Controls.Add(this.pictureBox2);
@@ -842,9 +842,9 @@
 
         private System.Windows.Forms.Label labelPlayerTurn;
         private System.Windows.Forms.Label labelPlayerNameTurn;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button buttonCheck;
+        private System.Windows.Forms.Button buttonFold;
+        private System.Windows.Forms.Button buttonCall;
         private System.Windows.Forms.PrintPreviewDialog printPreviewDialog1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
@@ -853,7 +853,7 @@
         private System.Windows.Forms.ToolStripMenuItem newGameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button buttonRaise;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.Label pOneName;
         private System.Windows.Forms.Label pTwoName;
