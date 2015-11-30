@@ -257,7 +257,6 @@ namespace AIPokerPlayer.UI
         {
             for(int i = 0; i < revealedCards.Count; i++)
             {
-                revealedCards[i].Image.Dispose();
                 revealedCards[i].Image = CARD_PLACEMENT;
                 revealedCardsCount = 0;
             }

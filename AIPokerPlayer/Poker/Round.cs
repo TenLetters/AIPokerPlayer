@@ -126,85 +126,81 @@ namespace AIPokerPlayer.Poker
         {
             // keep track of who is last to move which will change if anyone raises
             int lastToMove = indexOfBigBlindPlayer;
-            Boolean wasThereARaise = false;
+            int turnsTaken = 0;
 
-            Boolean done = false;
-
-            // loop until we finish all moves and there were no raises
-            while (!done)
+            int playersFoldedThisRound = 0;
+            // loop through all moves
+            for (int i = findPlayer(players, indexOfBigBlindPlayer, 1); ; i++)
             {
-                int playersFoldedThisRound = 0;
-                // loop through all moves
-                for (int i = findPlayer(players, indexOfBigBlindPlayer, 1); i < remainingPlayers - 1; i++)
+                // check if this player has already folded
+                if (!foldedPlayersPositions.Contains(i))
                 {
-                    // check if this player has already folded
-                    if (!foldedPlayersPositions.Contains(i))
+                    // update Ui to show player's cards
+                    gameForm.showPlayerHand(players[i]);
+
+                    // check possible moves for the player
+                    List<Move> possibleMoves = new List<Move>();
+                    // folding is always possible
+                    possibleMoves.Add(new Fold());
+                    // can only raise if your chip count > minimum raise amount
+                    // minimum raise amount is 1 chip (current leading contribution - player contribution = call amount; must have at least that many chips to raise)
+                    if (players[i].getChipCount() - highestChipsInPot + players[i].getChipsInCurrentPot() > 0)
+                        possibleMoves.Add(new Raise(players[i].getChipCount() - highestChipsInPot));
+                    // can only call if your chips > 0 and your contribution != max
+                    if (players[i].getChipCount() > 0 && players[i].getChipsInCurrentPot() != highestChipsInPot)
                     {
-                        // update Ui to show player's cards
-                        gameForm.showPlayerHand(players[i]);
-
-                        // check possible moves for the player
-                        List<Move> possibleMoves = new List<Move>();
-                        // folding is always possible
-                        possibleMoves.Add(new Fold());
-                        // can only raise if your chip count > minimum raise amount
-                        // minimum raise amount is 1 chip (current leading contribution - player contribution = call amount; must have at least that many chips to raise)
-                        if (players[i].getChipCount() - highestChipsInPot + players[i].getChipsInCurrentPot() > 0)
-                            possibleMoves.Add(new Raise(players[i].getChipCount() - highestChipsInPot));
-                        // can only call if your chips > 0 and your contribution != max
-                        if (players[i].getChipCount() > 0 && players[i].getChipsInCurrentPot() != highestChipsInPot)
-                        {
-                            // the call amount is the difference between the highest contribution and the players
-                            int callAmount = highestChipsInPot - players[i].getChipsInCurrentPot();
-                            // if the difference is greater than the players current chip count, the player must go all in
-                            if (callAmount < 0)
-                                callAmount = players[i].getChipCount();
-                            possibleMoves.Add(new Call(callAmount));
-                        }
-                        // can only check if your chips in pot = maximum contribution
-                        if (players[i].getChipsInCurrentPot() == highestChipsInPot)
-                            possibleMoves.Add(new Check());
-
-                        // Update the UI with the possible moves for the player
-                        gameForm.setAvailableButtons(possibleMoves);
-
-                        // get the players move
-                        Move selectedMove = null; // = players[i].requestAction(possibleMoves);
-                        if (selectedMove is Fold)
-                        {
-                            // if fold, add to folded player list, increment playersFoldedThisRound
-                            foldedPlayersPositions.Add(i);
-                            playersFoldedThisRound++;
-                        }
-                        else if (selectedMove is Raise)
-                        {
-                            // if raise, take bet and add to pot
-                            int raiseAmount = ((Raise)selectedMove).getRaiseAmount();
-                            players[i].modifyChipCount(-raiseAmount);
-                            players[i].addToChipsInCurrentPot(raiseAmount);
-                            // update the pot contribution leader for this round
-                            highestChipsInPot = players[i].getChipsInCurrentPot();
-                            //change last to move to this player
-                            lastToMove = i;
-                            // update raise boolean
-                            wasThereARaise = true;
-                        }
-                        else if (selectedMove is Call)
-                        {
-                            // if call, take bet and add to pot
-                            int callAmount = highestChipsInPot - players[i].getChipsInCurrentPot();
-                            callAmount = players[i].modifyChipCount(-callAmount);
-                            players[i].addToChipsInCurrentPot(callAmount);
-
-                        }
-                        // if check, do nothing
+                        // the call amount is the difference between the highest contribution and the players
+                        int callAmount = highestChipsInPot - players[i].getChipsInCurrentPot();
+                        // if the difference is greater than the players current chip count, the player must go all in
+                        if (callAmount < 0)
+                            callAmount = players[i].getChipCount();
+                        possibleMoves.Add(new Call(callAmount));
                     }
+                    // can only check if your chips in pot = maximum contribution
+                    if (players[i].getChipsInCurrentPot() == highestChipsInPot)
+                        possibleMoves.Add(new Check());
+
+                    // Update the UI with the possible moves for the player
+                    gameForm.setAvailableButtons(possibleMoves);
+
+                    // get the players move
+                    Move selectedMove = null; // players[i].requestAction(possibleMoves);
+                    if (selectedMove is Fold)
+                    {
+                        // if fold, add to folded player list, increment playersFoldedThisRound
+                        foldedPlayersPositions.Add(i);
+                        playersFoldedThisRound++;
+                    }
+                    else if (selectedMove is Raise)
+                    {
+                        // if raise, take bet and add to pot
+                        int raiseAmount = ((Raise)selectedMove).getRaiseAmount();
+                        players[i].modifyChipCount(-raiseAmount);
+                        players[i].addToChipsInCurrentPot(raiseAmount);
+                        // update the pot contribution leader for this round
+                        highestChipsInPot = players[i].getChipsInCurrentPot();
+                        // everyone needs a new turn to react to the raise
+                        turnsTaken = 0;
+                    }
+                    else if (selectedMove is Call)
+                    {
+                        // if call, take bet and add to pot
+                        int callAmount = highestChipsInPot - players[i].getChipsInCurrentPot();
+                        callAmount = players[i].modifyChipCount(-callAmount);
+                        players[i].addToChipsInCurrentPot(callAmount);
+
+                    }
+                    // if check, do nothing
+                    turnsTaken++;
+
+                    // if we still have more moves to make but are at the end of the player list, reset the index to -1 (incremented to 0 at start of the loop)
+                    if (turnsTaken < remainingPlayers && i == players.Count - 1)
+                        i = -1;
+                    else if (turnsTaken == remainingPlayers)
+                        break;
                 }
-                remainingPlayers -= playersFoldedThisRound;
-                // we are done if there were no raises
-                done = !wasThereARaise;
             }
-            
+
         }
 
         // asks the deck for the next set of board cards (flop, turn, river)

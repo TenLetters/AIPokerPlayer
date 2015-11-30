@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using AIPokerPlayer.Players;
 using AIPokerPlayer.UI;
+using System.Threading;
 
 namespace AIPokerPlayer.Poker
 {
@@ -29,18 +30,19 @@ namespace AIPokerPlayer.Poker
         {
             if (players.Count > 0)
             {
+                Thread thread = new Thread(this.play);
                 gameForm = new GameForm();
                 gameForm.Show();
                 this.activePlayers = players;
                 startingBlindAmount = players[0].getChipCount() % 100;
-                play();
+                thread.Start();
             }
         }
 
 
         // keep looping through rounds until a winner is determined
         // returns the winner
-        public Player play()
+        public void play()
         {
             Player roundWinner = activePlayers[0];
 
@@ -50,9 +52,6 @@ namespace AIPokerPlayer.Poker
                 roundWinner = new Round().playRound(activePlayers, gameForm, roundCount % activePlayers.Count, startingBlindAmount * (1 + roundCount/10));
                 roundCount++;
             }
-
-            
-            return roundWinner;
         }
 
 
