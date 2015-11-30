@@ -8,5 +8,16 @@ namespace AIPokerPlayer.Poker.Moves
 {
     class Call : Move
     {
+        int callAmount;
+
+        public Call(int amount)
+        {
+            this.callAmount = amount;
+        }
+
+        public int getCallAmount()
+        {
+            return callAmount;
+        }
     }
 }

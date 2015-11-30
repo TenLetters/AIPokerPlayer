@@ -53,6 +53,12 @@ namespace AIPokerPlayer.Poker
                     break;
             }
 
+            // reset all chip contributions to the pot for this round to 0
+            foreach(Player player in players)
+            {
+                player.resetChipsInCurrentPot();
+            }
+
             // determine the winner of this round after all rounds have finished or only 1 person has not folded
             return determineWinner(players, foldedPlayersPositions);     
         }
@@ -126,9 +132,16 @@ namespace AIPokerPlayer.Poker
                         // minimum raise amount is 1 chip (current leading contribution - player contribution = call amount; must have at least that many chips to raise)
                         if (players[i].getChipCount() - highestChipsInPot + players[i].getChipsInCurrentPot() > 0)
                             possibleMoves.Add(new Raise(players[i].getChipCount() - highestChipsInPot));
-                        // can only call if your chips > call amount and your contribution != max
-                        if (players[i].getChipCount() - highestChipsInPot + players[i].getChipsInCurrentPot() > 0 && players[i].getChipsInCurrentPot() != highestChipsInPot)
-                            possibleMoves.Add(new Call());
+                        // can only call if your chips > 0 and your contribution != max
+                        if (players[i].getChipCount() > 0 && players[i].getChipsInCurrentPot() != highestChipsInPot)
+                        {
+                            // the call amount is the difference between the highest contribution and the players
+                            int callAmount = highestChipsInPot - players[i].getChipsInCurrentPot();
+                            // if the difference is greater than the players current chip count, the player must go all in
+                            if (callAmount < 0)
+                                callAmount = players[i].getChipCount();
+                            possibleMoves.Add(new Call(callAmount));
+                        }
                         // can only check if your chips in pot = maximum contribution
                         if (players[i].getChipsInCurrentPot() == highestChipsInPot)
                             possibleMoves.Add(new Check());
@@ -159,7 +172,7 @@ namespace AIPokerPlayer.Poker
                         {
                             // if call, take bet and add to pot
                             int callAmount = highestChipsInPot - players[i].getChipsInCurrentPot();
-                            players[i].modifyChipCount(-callAmount);
+                            callAmount = players[i].modifyChipCount(-callAmount);
                             players[i].addToChipsInCurrentPot(callAmount);
 
                         }
