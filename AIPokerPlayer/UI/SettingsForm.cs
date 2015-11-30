@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Windows.Forms;
 using AIPokerPlayer.UI;
+using System.Collections.Generic;
+using AIPokerPlayer.Players;
+using AIPokerPlayer.Poker;
 
 /*
 *   AIPokerPlayer.UI.SettingsForm
@@ -22,6 +25,7 @@ namespace AIPokerPlayer
         private String[] playerNameList;
         private TextBox[] textBoxPlayerNames;
         private Panel[] panelGroups;
+        private List<Player> players;
 
         public SettingsForm()
         {
@@ -31,6 +35,7 @@ namespace AIPokerPlayer
             panelGroups = new Panel[MAX_PLAYER_COUNT];
             playerNameList = new String[MAX_PLAYER_COUNT];
             playerList = new String[MAX_PLAYER_COUNT];
+            players = new List<Player>();
 
             //Add TextBoxes to Array for reference
             textBoxPlayerNames[0] = textPlayerOneName;
@@ -91,6 +96,30 @@ namespace AIPokerPlayer
         {
             setStartingChips();
             setPlayerList();
+            Player tmpPlayer;
+
+            for(int i = 0; i < MAX_PLAYER_COUNT; i++)
+            {
+                tmpPlayer = null;
+
+                if(playerList[i].Equals("Human"))
+                {
+                    tmpPlayer = new HumanPlayer(playerNameList[i], startingChips, i);
+                }
+                else if (playerList[i].Equals("AI"))
+                {
+                    tmpPlayer = new AIPlayer(playerNameList[i], startingChips, i);
+                }
+                else
+                {
+                    //slot was empty, don't add anything to our list
+                }
+
+                if(tmpPlayer != null)
+                {
+                    players.Add(tmpPlayer);
+                }
+            }
         }
 
         /*
@@ -102,8 +131,10 @@ namespace AIPokerPlayer
         {
             finalizeSettings();
             //Pass 'this' to the next controller object
-            GameForm gameForm = new GameForm();
-            gameForm.Show();
+            Game game = new Game(players);
+
+            //GameForm gameForm = new GameForm();
+            //gameForm.Show();
             this.Hide();
         }
 

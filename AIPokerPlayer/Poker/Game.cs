@@ -29,6 +29,8 @@ namespace AIPokerPlayer.Poker
         {
             if (players.Count > 0)
             {
+                GameForm gameForm = new GameForm();
+                gameForm.Show();
                 this.activePlayers = players;
                 startingBlindAmount = players[0].getChipCount() % 100;
                 play();

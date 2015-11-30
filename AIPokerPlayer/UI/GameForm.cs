@@ -288,7 +288,7 @@ namespace AIPokerPlayer.UI
         *   Param: List<Move>
         *   Takes a list of moves which will determine what the player's options are for their turn
         */
-        public void setAvailableButtons(List<Move> moves)
+       /* public void setAvailableButtons(List<Move> moves)
         {
             foreach(Move move in moves)
             {
@@ -312,7 +312,7 @@ namespace AIPokerPlayer.UI
                     buttonFold.Enabled = true;
                 }
             }
-        }
+        }*/
 
         /*
         *   Param:
