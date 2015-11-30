@@ -30,6 +30,8 @@ namespace AIPokerPlayer.Poker.Cards
         //Creates a deck ordered by each value in a suit, then moving to the next suit
         private void createOrderedDeck()
         {
+            deck = new List<Card>();
+
             foreach (Suit enumSuit in Enum.GetValues(typeof(Suit)))
             {
                 foreach (Value enumValue in Enum.GetValues(typeof(Value)))
@@ -57,28 +59,16 @@ namespace AIPokerPlayer.Poker.Cards
         // reset the currentIndex to 0
         private void shuffleDeck(Random random)
         {
-<<<<<<< HEAD
             int n = deck.Count;
 
-            for(int i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
                 int r = i + (int)(random.NextDouble() * (n - i));
                 Card card = deck[r];
                 deck[r] = deck[i];
                 deck[i] = card;
-=======
-            List<Card> tmpDeck = new List<Card>();
-            int orderedDeckSize = deck.Count;
-            for (int i = 0; orderedDeckSize > 0; i++)
-            {
-                int randomNumber = random.Next(0, orderedDeckSize - 1); //52 cards in our deck
-                tmpDeck.Add(deck[randomNumber]);
-                deck.RemoveAt(randomNumber);
-                orderedDeckSize = deck.Count;
->>>>>>> middle59-master
+
             }
-            deck = tmpDeck;
-            currentIndex = 0;
         }
 
         // returns the next n cards from the top of the deck
