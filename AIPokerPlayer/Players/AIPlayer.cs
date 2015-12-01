@@ -34,6 +34,8 @@ namespace AIPokerPlayer.Players
         EvalResult currentHandValue;
         List<Move> possibleMoves;
         List<Player> players;
+        int numRaisesThisRound;
+        int round;
 
         public AIPlayer(string name, int startingChipCount, int position)
             : base(name, startingChipCount, position)
@@ -52,6 +54,8 @@ namespace AIPokerPlayer.Players
                 preFlopMultiplierValues = new PreFlopMultiplierValues();
             }
             handEval = new HandEvaluator();
+            // always start with pre-flop
+            round = 0;
 
         }
 
@@ -63,14 +67,50 @@ namespace AIPokerPlayer.Players
             stream.Close();
         }
 
-        public override Move requestAction(List<Move> possibleMoves)
+        public override Move requestAction(List<Move> possibleMoves, List<Player> players)
         {
             this.possibleMoves = possibleMoves;
-            //return new Check();
-            throw new NotImplementedException();
+            this.players = players;
+            numRaisesThisRound = 0;
+
+            return getMoveBasedOnRound();
             //call appropriate action method based on where we are in the round
         }
 
+
+        /// <summary>
+        /// Returns the pre-flop action for round = 0, post-flop action for round = 1 || round = 2, and post-river action for round =3
+        /// </summary>
+        /// <returns></returns>
+        public Move getMoveBasedOnRound()
+        {
+            switch (round)
+            {
+                case 0:
+                    {
+                        round++;
+                        return preFlopAction();
+                    }
+                case 1:
+                    {
+                        round++;
+                        return postFlopAction();
+                    }
+                case 2:
+                    {
+                        round++;
+                        return postFlopAction();
+                    }
+                case 3:
+                    {
+                        round++;
+                        return postRiverAction();
+                    }
+            }
+            // something went wrong and we lost our track of what position in the game we are
+            // fold our hand
+            return new Fold();
+        }
 
         //*****these action methods may be better as a class so we can store information since it is likly there will be multiple rounds of betting 
         //it would probably be better use to classes to store the data then doing it inside this class
@@ -146,24 +186,78 @@ namespace AIPokerPlayer.Players
                 // check if our current contribution to the pot is a low percentage of our chip count 
                 // check how far off of the highest our contribution is (given in Call if it exists, if it does not then we are the contribution leader)
                 // check how many players remain
+                if (players.Count < 3)
+                {
+                    // since there are so few players, all still in probably have decent hands and will call any bet
+                    // raise to put more money into the pot but not a large bet
+                    raiseAmount += Convert.ToInt32(getChipCount() * .1);
+                }
+                else // there are still a lot of players remaining in this round of betting
+                {
+                    // since there are still a lot of players in this round we will make a larger bet to force out weaker hands that may
+                    // end up beating us if they stick around for too long with a lucky flop/river
+                    raiseAmount += Convert.ToInt32(getChipCount() * .2);
+                }
 
+                // we can be aggressive if we have a solid ranking in the chip leaderboard and if we have not already raised twice this round
+                if (getChipCount() / highestChips > .85 && numRaisesThisRound < 3)
+                {
+                    // we are the chip leader or very close and there are few players remaining
+                    // play aggressively
+                    numRaisesThisRound++;
+                    return new Raise(raiseAmount);
+                }
+                else
+                // either we are not high on the chip leaderboard or we have raised enough this round already
+                // check whether we should call or check this hand
+                {
+                    // if we can check for free and we are not high on chips let's test the waters before diving all in
+                    if (!canCall)
+                        return new Check();
+                    else
+                    {
+                        // we have a really strong hand and probably cannot afford to give it up and hope for a better one which may not come
+                        // even if the call makes us go all in let's try for it since we have a good shot at winning
+                        return new Call(callAmount);
+                    }
+                }
             }
             //above average playable hand
             else if (value > preFlopMultiplierValues.getAverageMultiplier() * 1.5)
             {
                 // we may want to raise here. most likely want to call assumming the call amount is not a huge percentage of our chips
+
+                // if there are only a few players remaining then we should call and try to stay in the pot since our chances are good
+                if(players.Count < 3)
+                {
+                    return new Call(callAmount);
+                }
+                else
+                // if there are a lot of players left then we should raise in order to force out weaker hands
+                {
+                    // only raise if we havent already this round
+                    if (numRaisesThisRound < 1)
+                    {
+                        raiseAmount += Convert.ToInt32(getChipCount() * .1);
+                        numRaisesThisRound++;
+                        return new Raise(raiseAmount);
+                    }
+                    else
+                        return new Call(callAmount);
+                }
             }
             //slightly above average playable hand
             else if (value > preFlopMultiplierValues.getAverageMultiplier() * 1.25)
             {
                 // make a small raise if we are currently the chip leader for the given hand or the difference between our chip stacks is small
                 
-                // check if our stack is at least 75% of the leader's stack
-                if(getChipCount()/highestChips > .75)
+                // check if our stack is at least 75% of the leader's stack and we have not raised this round yet
+                if(getChipCount()/highestChips > .75 && numRaisesThisRound < 1)
                 {
                     // we can try to bully the opponents
                     // bet 10% of our chips
                     raiseAmount +=  Convert.ToInt32(getChipCount() * .1);
+                    numRaisesThisRound++;
                     return new Raise(raiseAmount);
                 }
                 // otherwise call or check depending on the call amount
@@ -263,11 +357,10 @@ namespace AIPokerPlayer.Players
         /// may need hand/ possible actions(moves) as a param/s
         /// will return a move that we want to preform
         /// </summary>
-        public void postFlopAction()
+        public Move postFlopAction()
         {
             List<Card> fiveCardHand = new List<Card>();
             fiveCardHand.AddRange(playerHand);
-            fiveCardHand.AddRange(CardsOnBoard);
             currentHandValue = handEval.evaluateHand(fiveCardHand);
             // at this point we have a good idea of what our hand is going to be or can possibly be
             // have a logic block that determines what move to make based on the returns from the 2 methods below
@@ -320,7 +413,7 @@ namespace AIPokerPlayer.Players
         /// <summary>
         /// choose a move to preform after the river card has been shown
         /// </summary>
-        public void postRiverAction()
+        public Move postRiverAction()
         {
             // Now we know what our best hand is and know that another player either has a good hand or is bluffing since in almost all hands that get here we plan to bet(excluding the possible case were our hand is bad and we keep checkin)
             // again we will use isOurHandLiklyBetterThanAnyOtherPlayers to determine if our hand is better and we will bet accordingly

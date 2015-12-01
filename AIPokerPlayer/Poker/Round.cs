@@ -227,10 +227,19 @@ namespace AIPokerPlayer.Poker
                     // Update the UI with the possible moves for the player
                     gameForm.setAvailableButtons(possibleMoves);
 
+                    // get a list of all players who havent folded and arent the current player
+                    List<Player> playersStillInRound = new List<Player>();
+
+                    for(int j = 0; j < players.Count; j++)
+                    {
+                        if (j != i && !foldedPlayersPositions.Contains(j))
+                            playersStillInRound.Add(players[j]);
+                    }
+
                     // get the players move
                     Move selectedMove = null;
                     players[i].setMoveChoice(null);
-                    selectedMove = players[i].requestAction(possibleMoves);
+                    selectedMove = players[i].requestAction(possibleMoves, playersStillInRound);
                     if (selectedMove is Fold)
                     {
                         // if fold, add to folded player list, increment playersFoldedThisRound
