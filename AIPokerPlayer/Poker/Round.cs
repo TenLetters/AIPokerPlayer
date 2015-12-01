@@ -22,7 +22,7 @@ namespace AIPokerPlayer.Poker
         private GameForm gameForm;
         private Player activePlayer = null;
         List<int> foldedPlayersPositions = new List<int>();
-        int DELAY_SPEED = 0; //Visually in MS, how long we delay AIs for their turns so we can see what they do
+        int DELAY_SPEED = 150; //Visually in MS, how long we delay AIs for their turns so we can see what they do
 
         // plays this round of poker with the given players
         // removes players from the list if they have been knocked out (0 chips)

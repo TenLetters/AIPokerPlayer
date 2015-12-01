@@ -148,7 +148,7 @@ namespace AIPokerPlayer
 
         public double getAverageMultiplier()
         {
-            return (suitedMultiplier + pairMultiplier + lowStraightChanceMultiplier + highStraightChanceMultiplier + highCardMultiplier + doubleHighCardMultiplier)/6;
+            return (suitedMultiplier + pairMultiplier + lowStraightChanceMultiplier + highStraightChanceMultiplier + highCardMultiplier + doubleHighCardMultiplier)/7;
         }
     }
 }
