@@ -205,7 +205,38 @@ namespace AIPokerPlayer.Players
         /// **scoring could be affected by learing 
         /// </summary>
         /// <returns>return a rating based on the comparison, greather than 1 we likly have the better hand, less than one we likly have the worse hand </returns>
-        public double isOurHandLiklyBetterThanAnyOtherPlayers() { return 0; }
+        public int getMostLikelyNextHandValue()
+        {
+            //Probability probCalc = new Probability();
+            //Brute Force -- 1 Card ahead, evaluate all possible Hands
+            List<Card> possibleHand;
+            Dictionary<int, int> result = new Dictionary<int, int>();
+            for(int i = 0; i <= 8; i++)
+            {
+                result.Add(i, 0);
+            }
+            EvalResult currentResult;
+            foreach (Suit enumSuit in Enum.GetValues(typeof(Suit)))
+            {
+                foreach (Value enumValue in Enum.GetValues(typeof(Value)))
+                {
+                    possibleHand = playerHand;
+                    possibleHand.Add(new Card(enumValue, enumSuit));
+                    currentResult = handEval.evaluateHand(possibleHand);
+                    result[currentResult.getHandValue()] += 1;
+                }
+            }
+            int mostLikelyHandValue = 0;
+            foreach(int key in result.Keys)
+            {
+                if(result[key] > result[mostLikelyHandValue])
+                {
+                    mostLikelyHandValue = key;
+                }
+            }
+
+            return mostLikelyHandValue;
+        }
 
         /// <summary>
         /// use probabilty to determine if it is likely our hand will improve with the comming cards
