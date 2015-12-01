@@ -22,15 +22,12 @@ namespace AIPokerPlayer.Players
         /// this way we dont have to recompute every thing and we can know how much we already bet.
         /// we could also store this object for learning purposes.
         /// </summary>
-        object storage;
         PreFlopMultiplierValues preFlopMultiplierValues;
 
         //out means the hand is two cards with a difference of one ie 3,4 A,k
         //in is any hand that has 2 cards that could be used in a straight together
         //suited and inStraight are worth a lot less preflop then the other attributes
         //all these attributes will be affected by learning 
-        double suitedMultiplier = 1.4, pairMultiplier = 2, lowStraightChanceMultiplier = 1.3, highStraightChanceMultiplier = 1.7, highCardMultiplier = 1.6, doubleHighCardMultiplier = 1.85;
-        double averageMultiplier;
         bool suited, pair, lowStraightChance, highStraightChance, highCard, doubleHighCard;
         EvalResult currentHandValue;
 
@@ -39,9 +36,6 @@ namespace AIPokerPlayer.Players
         public AIPlayer(string name, int startingChipCount, int position)
             : base(name, startingChipCount, position)
         {
-            averageMultiplier = suitedMultiplier + pairMultiplier + lowStraightChanceMultiplier + highStraightChanceMultiplier + highCardMultiplier + doubleHighCardMultiplier;
-            averageMultiplier /= 6;
-
             if (File.Exists("PreFlopMultiplierValuesInfo.osl"))
             {
                 preFlopMultiplierValues = null;
@@ -50,6 +44,10 @@ namespace AIPokerPlayer.Players
                 BinaryFormatter bformatter = new BinaryFormatter();
                 preFlopMultiplierValues = (PreFlopMultiplierValues)bformatter.Deserialize(stream);
                 stream.Close();
+            }
+            else 
+            {
+                preFlopMultiplierValues = new PreFlopMultiplierValues();
             }
 
         }
@@ -105,22 +103,22 @@ namespace AIPokerPlayer.Players
             }
             double value = preFlopHandValue();
             //very good hand
-            if (value > averageMultiplier * 2)
+            if (value > preFlopMultiplierValues.getAverageMultiplier() * 2)
             {
 
             }
             //above average playable hand
-            else if (value > averageMultiplier * 1.5)
+            else if (value > preFlopMultiplierValues.getAverageMultiplier() * 1.5)
             {
 
             }
             //slightly above average playable hand
-            else if (value > averageMultiplier * 1.25)
+            else if (value > preFlopMultiplierValues.getAverageMultiplier() * 1.25)
             {
 
             }
             //playable hand
-            else if (value > averageMultiplier)
+            else if (value > preFlopMultiplierValues.getAverageMultiplier())
             {
 
             }
@@ -151,27 +149,27 @@ namespace AIPokerPlayer.Players
             // used bool attributes to assign a hand value, this will be affected by learning
             if (suited)
             {
-                value *= suitedMultiplier;
+                value *= preFlopMultiplierValues.getSuitedMultiplier();
             }
             else if (pair)
             {
-                value *= pairMultiplier;
+                value *= preFlopMultiplierValues.getPairMultiplier();
             }
             if (highStraightChance)
             {
-                value *= highStraightChanceMultiplier;
+                value *= preFlopMultiplierValues.getHighStraightChanceMultiplier();
             }
             if (lowStraightChance)
             {
-                value *= lowStraightChanceMultiplier;
+                value *= preFlopMultiplierValues.getLowStraightChanceMultiplier();
             }
             if (doubleHighCard)
             {
-                value *= doubleHighCardMultiplier;
+                value *= preFlopMultiplierValues.getDoubleHighCardMultiplier();
             }
             else if (highCard)
             {
-                value *= highCardMultiplier;
+                value *= preFlopMultiplierValues.getHighCardMultiplier();
             }
             return value;
         }
