@@ -70,17 +70,22 @@ namespace AIPokerPlayer.Poker
                     break;
             }
 
+
+            // determine the winner of this round after all rounds have finished or only 1 person has not folded
+            Player winner = determineWinner(players, foldedPlayersPositions);
             // reset all chip contributions to the pot for this round to 0
             foreach(Player player in players)
             {
                 player.resetChipsInCurrentPot();
+                if (player is AIPlayer)
+                    {
+                        ((AIPlayer)player).learnAndCleanUp(winner);
+                    }
             }
 
             //Round is over, reveal all player hands
             gameForm.appendHistory(playerHandString);
 
-            // determine the winner of this round after all rounds have finished or only 1 person has not folded
-            Player winner = determineWinner(players, foldedPlayersPositions);
             winner.modifyChipCount(potAmount);
 
             //Update our history with the round winner information
@@ -227,10 +232,19 @@ namespace AIPokerPlayer.Poker
                     // Update the UI with the possible moves for the player
                     gameForm.setAvailableButtons(possibleMoves);
 
+                    // get a list of all players who havent folded and arent the current player
+                    List<Player> playersStillInRound = new List<Player>();
+
+                    for(int j = 0; j < players.Count; j++)
+                    {
+                        if (j != i && !foldedPlayersPositions.Contains(j))
+                            playersStillInRound.Add(players[j]);
+                    }
+
                     // get the players move
                     Move selectedMove = null;
                     players[i].setMoveChoice(null);
-                    selectedMove = players[i].requestAction(possibleMoves);
+                    selectedMove = players[i].requestAction(possibleMoves, playersStillInRound);
                     if (selectedMove is Fold)
                     {
                         // if fold, add to folded player list, increment playersFoldedThisRound
