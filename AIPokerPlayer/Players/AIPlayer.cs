@@ -322,9 +322,38 @@ namespace AIPokerPlayer.Players
         /// </summary>
         public void postRiverAction()
         {
-            // Now we know what our best hand is and know that another player either has a good hand or is bluffing since in almost all hands that get here we plan to bet(excluding the possible case were our hand is bad and we keep checkin)
-            // again we will use isOurHandLiklyBetterThanAnyOtherPlayers to determine if our hand is better and we will bet accordingly
-            // here we must again consider bluffing and our aggression level based on relative chip count(our compared to the players at the table)
+            
+        }
+
+        public void learnAndCleanUp(Player winner)
+        {
+            if (getName() == winner.getName()) // we won so increment our attributes since they lead to a winning hand
+            {
+                if (suited) preFlopMultiplierValues.incrementSuitedMultiplier();
+                if (pair) preFlopMultiplierValues.incrementPairMultiplier();
+                if (highStraightChance) preFlopMultiplierValues.incrementHighStraightChanceMultiplier();
+                if (lowStraightChance) preFlopMultiplierValues.incrementLowStraightChanceMultiplier();
+                if (highCard) preFlopMultiplierValues.incrementHighCardMultiplier();
+                if (doubleHighCard) preFlopMultiplierValues.incrementDoubleHighCardMultiplier();
+            }
+            else //not the winner decrement our attributes since they did not lead to a winning hand
+            {
+                if (suited) preFlopMultiplierValues.decrementSuitedMultiplier();
+                if (pair) preFlopMultiplierValues.decrementPairMultiplier();
+                if (highStraightChance) preFlopMultiplierValues.decrementHighStraightChanceMultiplier();
+                if (lowStraightChance) preFlopMultiplierValues.decrementLowStraightChanceMultiplier();
+                if (highCard) preFlopMultiplierValues.decrementHighCardMultiplier();
+                if (doubleHighCard) preFlopMultiplierValues.decrementDoubleHighCardMultiplier();
+            }
+            resetRoundBasedVariables();
+            serializeMultiplierValues();
+        }
+        /// <summary>
+        /// used to reset round specific variables after each round
+        /// </summary>
+        public void resetRoundBasedVariables()
+        { 
+        
         }
     }
 
