@@ -24,9 +24,6 @@ namespace AIPokerPlayer.Players
         /// </summary>
         PreFlopMultiplierValues preFlopMultiplierValues;
 
-        //store the previous move so me know how much we have bet if we have to bet agian in this betting stage
-        Move previousMove;
-
         HandEvaluator handEval;
 
         //out means the hand is two cards with a difference of one ie 3,4 A,k
@@ -35,9 +32,6 @@ namespace AIPokerPlayer.Players
         //all these attributes will be affected by learning 
         bool suited, pair, lowStraightChance, highStraightChance, highCard, doubleHighCard;
         EvalResult currentHandValue;
-
-        List<Card> CardsOnBoard;
-
         List<Move> possibleMoves;
         List<Player> players;
 
@@ -80,7 +74,7 @@ namespace AIPokerPlayer.Players
 
         //*****these action methods may be better as a class so we can store information since it is likly there will be multiple rounds of betting 
         //it would probably be better use to classes to store the data then doing it inside this class
-        public void preFlopAction()
+        public Move preFlopAction()
         {
             //Code to set up booleans based on given hand
             //assuming hand holds only 2 cards
@@ -320,23 +314,6 @@ namespace AIPokerPlayer.Players
             }
 
             return mostLikelyHandValue;
-        }
-
-        /// <summary>
-        /// use probabilty to determine if it is likely our hand will improve with the comming cards
-        /// this methods will probably return a list of possible hands with the probability of drawing to that hand 
-        /// </summary>
-        public void willOurHandGetBetter()
-        {
-
-        }
-
-        /// <summary>
-        /// will be similar to post flop action
-        /// </summary>
-        public void postTurnAction()
-        {
-
         }
 
 
