@@ -24,6 +24,11 @@ namespace AIPokerPlayer.Players
         /// </summary>
         PreFlopMultiplierValues preFlopMultiplierValues;
 
+        //store the previous move so me know how much we have bet if we have to bet agian in this betting stage
+        Move previousMove;
+
+        HandEvaluator handEval;
+
         //out means the hand is two cards with a difference of one ie 3,4 A,k
         //in is any hand that has 2 cards that could be used in a straight together
         //suited and inStraight are worth a lot less preflop then the other attributes
@@ -49,6 +54,7 @@ namespace AIPokerPlayer.Players
             {
                 preFlopMultiplierValues = new PreFlopMultiplierValues();
             }
+            handEval = new HandEvaluator();
 
         }
 
@@ -181,6 +187,10 @@ namespace AIPokerPlayer.Players
         /// </summary>
         public void postFlopAction()
         {
+            List<Card> fiveCardHand = new List<Card>();
+            fiveCardHand.AddRange(playerHand);
+            fiveCardHand.AddRange(CardsOnBoard);
+            currentHandValue = handEval.evaluateHand(fiveCardHand);
             // at this point we have a good idea of what our hand is going to be or can possibly be
             // have a logic block that determines what move to make based on the returns from the 2 methods below
             // may also consider if the player(s) are prone to bluffing
