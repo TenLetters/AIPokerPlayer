@@ -22,7 +22,7 @@ namespace AIPokerPlayer.Poker
         private GameForm gameForm;
         private Player activePlayer = null;
         List<int> foldedPlayersPositions = new List<int>();
-        int DELAY_SPEED = 250; //Visually in MS, how long we delay AIs for their turns so we can see what they do
+        int DELAY_SPEED = 0; //Visually in MS, how long we delay AIs for their turns so we can see what they do
 
         // plays this round of poker with the given players
         // removes players from the list if they have been knocked out (0 chips)
@@ -188,10 +188,15 @@ namespace AIPokerPlayer.Poker
 
             int playersFoldedThisRound = 0;
 
-            gameForm.setBigBlindPlayer(players[lastToMove]);
+           
             // loop through all moves
-            for (int i = findPlayer(players, indexOfBigBlindPlayer, 1); ; i++)
+            int i = findPlayer(players, indexOfBigBlindPlayer, 1);
+            for (gameForm.setBigBlindPlayer(players[lastToMove]); ; i++)
             {
+
+                if (i > players.Count - 1)
+                    i = 0;
+
                 // check if this player has already folded
                 if (!foldedPlayersPositions.Contains(i))
                 {
@@ -235,7 +240,7 @@ namespace AIPokerPlayer.Poker
                     // get a list of all players who havent folded and arent the current player
                     List<Player> playersStillInRound = new List<Player>();
 
-                    for(int j = 0; j < players.Count; j++)
+                    for (int j = 0; j < players.Count; j++)
                     {
                         if (j != i && !foldedPlayersPositions.Contains(j))
                             playersStillInRound.Add(players[j]);
@@ -244,12 +249,13 @@ namespace AIPokerPlayer.Poker
                     // get the players move
                     Move selectedMove = null;
                     players[i].setMoveChoice(null);
-                    selectedMove = players[i].requestAction(possibleMoves, playersStillInRound);
+                    selectedMove = players[i].requestAction(possibleMoves, new List<Player>(playersStillInRound));
                     if (selectedMove is Fold)
                     {
                         // if fold, add to folded player list, increment playersFoldedThisRound
                         foldedPlayersPositions.Add(i);
                         playersFoldedThisRound++;
+                        remainingPlayers--;
                         gameForm.appendHistory(players[i].getName() + " folded.");
                     }
                     else if (selectedMove is Raise)
@@ -292,14 +298,11 @@ namespace AIPokerPlayer.Poker
                     gameForm.updatePlayerChipCount(players[i]);
                     gameForm.setPotTotal(potAmount);
 
-                    if((players.Count-foldedPlayersPositions.Count) <= 1)
+                    if ((players.Count - foldedPlayersPositions.Count) <= 1)
                     {
                         break;
                     }
-                    // if we still have more moves to make but are at the end of the player list, reset the index to -1 (incremented to 0 at start 
-                    if (turnsTaken < remainingPlayers && i == players.Count - 1)
-                        i = -1;
-                    else if (turnsTaken == remainingPlayers)
+                    if (turnsTaken == remainingPlayers)
                         break;
                 }
             }
