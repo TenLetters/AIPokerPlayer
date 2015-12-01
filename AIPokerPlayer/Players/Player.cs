@@ -31,7 +31,7 @@ namespace AIPokerPlayer.Players
         }
 
         // get the player's decision for their next move
-        public abstract Move requestAction(List<Move> possibleMoves);
+        public abstract Move requestAction(List<Move> possibleMoves, List<Player> players);
 
         public Move getMoveChoice() { return moveChoice; }
         public void setMoveChoice(Move m) { moveChoice = m; }

@@ -15,7 +15,7 @@ namespace AIPokerPlayer.Players
         public HumanPlayer(string name, int startingChipCount, int position) : base(name, startingChipCount, position)
         { }
         
-        public override Move requestAction(List<Move> possibleMoves)
+        public override Move requestAction(List<Move> possibleMoves, List<Player> players)
         {
             while(getMoveChoice() == null)
             {
