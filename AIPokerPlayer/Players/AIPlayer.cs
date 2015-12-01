@@ -13,7 +13,7 @@ using System.IO;
 namespace AIPokerPlayer.Players
 {
     /// <summary>
-    /// written by Scott Boyce
+    /// written by Scott Boyce, Alex Ciaramella, and Mike Middleton
     /// </summary>
     class AIPlayer : Player
     {
@@ -37,6 +37,9 @@ namespace AIPokerPlayer.Players
         EvalResult currentHandValue;
 
         List<Card> CardsOnBoard;
+
+        List<Move> possibleMoves;
+        List<Player> players;
 
         public AIPlayer(string name, int startingChipCount, int position)
             : base(name, startingChipCount, position)
@@ -68,6 +71,8 @@ namespace AIPokerPlayer.Players
 
         public override Move requestAction(List<Move> possibleMoves)
         {
+            this.possibleMoves = possibleMoves;
+            //return new Check();
             throw new NotImplementedException();
             //call appropriate action method based on where we are in the round
         }
@@ -108,30 +113,109 @@ namespace AIPokerPlayer.Players
                 }
             }
             double value = preFlopHandValue();
+
+            Boolean canRaise = false;
+            Boolean canCall = false;
+            int raiseAmount = 1;
+            int callAmount = 1;
+            int highestChips = 0;
+
+            // check which player in the list has the highest chips
+            // the list of players will contain all other players still in the hand, excluding ourself
+            foreach (Player player in players)
+            {
+                if (player.getChipCount() > highestChips)
+                    highestChips = player.getChipCount();
+            }
+
+            // check if we are allowed to raise or call this turn
+            // if we can, retrieve the minimum amounts associated with these actions
+            foreach (Move move in possibleMoves)
+            {
+                if(move is Raise)
+                {
+                    raiseAmount = ((Raise)move).getMinimumRaise();
+                    canRaise = true;
+                }
+                else if(move is Call)
+                {
+                    callAmount = ((Call)move).getCallAmount();
+                    canCall = true;
+                }
+            }
+
             //very good hand
             if (value > preFlopMultiplierValues.getAverageMultiplier() * 2)
             {
+                // we probably want to raise here depending on numbers of players left, our current chip total, and our current chips already in the pot
+
+                // check if our current contribution to the pot is a low percentage of our chip count 
+                // check how far off of the highest our contribution is (given in Call if it exists, if it does not then we are the contribution leader)
+                // check how many players remain
 
             }
             //above average playable hand
             else if (value > preFlopMultiplierValues.getAverageMultiplier() * 1.5)
             {
-
+                // we may want to raise here. most likely want to call assumming the call amount is not a huge percentage of our chips
             }
             //slightly above average playable hand
             else if (value > preFlopMultiplierValues.getAverageMultiplier() * 1.25)
             {
+                // make a small raise if we are currently the chip leader for the given hand or the difference between our chip stacks is small
+                
+                // check if our stack is at least 75% of the leader's stack
+                if(getChipCount()/highestChips > .75)
+                {
+                    // we can try to bully the opponents
+                    // bet 10% of our chips
+                    raiseAmount +=  Convert.ToInt32(getChipCount() * .1);
+                    return new Raise(raiseAmount);
+                }
+                // otherwise call or check depending on the call amount
+                if (!canCall)
+                    return new Check();
+                else
+                {
+                    // if the call amount is less than 10% of our chips, then 
+                    if (getChipCount() / callAmount > 20)
+                    {
+                        return new Call(callAmount);
+                    }
 
+                    else
+                        return new Fold();
+                }
             }
             //playable hand
             else if (value > preFlopMultiplierValues.getAverageMultiplier())
             {
-
+                // make small calls or check if available
+                // fold if the call is too large
+                
+                // if we are unable to call then we can check for free
+                if(!canCall)
+                {
+                    return new Check();
+                }
+                // if the call is a small percentage of our chips then make it
+                else if(canCall && getChipCount()/callAmount < .05)
+                {
+                    return new Call(callAmount);
+                }
+                else
+                {
+                    return new Fold();
+                }
             }
             //currently not a playable hand
             else
             {
-
+                // check if possible. if not then fold
+                if (!canCall)
+                    return new Check();
+                // checking is not an option, fold
+                return new Fold();
             }
 
             //use the value of the hand to decide to call raise check or fold
@@ -205,7 +289,38 @@ namespace AIPokerPlayer.Players
         /// **scoring could be affected by learing 
         /// </summary>
         /// <returns>return a rating based on the comparison, greather than 1 we likly have the better hand, less than one we likly have the worse hand </returns>
-        public double isOurHandLiklyBetterThanAnyOtherPlayers() { return 0; }
+        public int getMostLikelyNextHandValue()
+        {
+            //Probability probCalc = new Probability();
+            //Brute Force -- 1 Card ahead, evaluate all possible Hands
+            List<Card> possibleHand;
+            Dictionary<int, int> result = new Dictionary<int, int>();
+            for(int i = 0; i <= 8; i++)
+            {
+                result.Add(i, 0);
+            }
+            EvalResult currentResult;
+            foreach (Suit enumSuit in Enum.GetValues(typeof(Suit)))
+            {
+                foreach (Value enumValue in Enum.GetValues(typeof(Value)))
+                {
+                    possibleHand = playerHand;
+                    possibleHand.Add(new Card(enumValue, enumSuit));
+                    currentResult = handEval.evaluateHand(possibleHand);
+                    result[currentResult.getHandValue()] += 1;
+                }
+            }
+            int mostLikelyHandValue = 0;
+            foreach(int key in result.Keys)
+            {
+                if(result[key] > result[mostLikelyHandValue])
+                {
+                    mostLikelyHandValue = key;
+                }
+            }
+
+            return mostLikelyHandValue;
+        }
 
         /// <summary>
         /// use probabilty to determine if it is likely our hand will improve with the comming cards
