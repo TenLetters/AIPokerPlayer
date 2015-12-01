@@ -77,6 +77,7 @@ namespace AIPokerPlayer.Poker
             foreach(Player player in players)
             {
                 player.resetChipsInCurrentPot();
+                player.setMoveChoice(null);
                 if (player is AIPlayer)
                     {
                         ((AIPlayer)player).learnAndCleanUp(winner);
@@ -250,6 +251,7 @@ namespace AIPokerPlayer.Poker
                     Move selectedMove = null;
                     players[i].setMoveChoice(null);
                     selectedMove = players[i].requestAction(possibleMoves, new List<Player>(playersStillInRound));
+                    gameForm.disableAllButtons();
                     if (selectedMove is Fold)
                     {
                         // if fold, add to folded player list, increment playersFoldedThisRound
@@ -340,7 +342,15 @@ namespace AIPokerPlayer.Poker
             }
 
             // keep track of the current best hand
-            Player winner = players[0];
+            //set to first person's hand who isnt in foldedPlayerPositions
+            Player winner = null;
+            for (int i = 0; i < players.Count; i++)
+            {
+                    if (!(folderPlayerPositions.Contains(i)))
+                    {
+                        winner = players[i];
+                    }       
+            }
 
             // check all player's cards for the best hand
             for(int i = 1; i < players.Count; i++)

@@ -73,7 +73,8 @@ namespace AIPokerPlayer.Players
             this.players = players;
             numRaisesThisRound = 0;
 
-            return getMoveBasedOnRound();
+            moveChoice = getMoveBasedOnRound();
+            return moveChoice;
             //call appropriate action method based on where we are in the round
         }
 
@@ -159,6 +160,10 @@ namespace AIPokerPlayer.Players
             {
                 if (player.getChipCount() > highestChips)
                     highestChips = player.getChipCount();
+            }
+            if(highestChips == 0)
+            {
+                highestChips = 1;
             }
 
             // check if we are allowed to raise or call this turn
@@ -402,6 +407,10 @@ namespace AIPokerPlayer.Players
                     if (player.getChipCount() > highestChips)
                         highestChips = player.getChipCount();
                 }
+                if (highestChips == 0)
+                {
+                    highestChips = 1;
+                }
 
                 // check if we are allowed to raise or call this turn
                 // if we can, retrieve the minimum amounts associated with these actions
@@ -561,6 +570,10 @@ namespace AIPokerPlayer.Players
                     if (player.getChipCount() > highestChips)
                         highestChips = player.getChipCount();
                 }
+                if (highestChips == 0)
+                {
+                    highestChips = 1;
+                }
 
                 // check if we are allowed to raise or call this turn
                 // if we can, retrieve the minimum amounts associated with these actions
@@ -672,6 +685,13 @@ namespace AIPokerPlayer.Players
         public void resetRoundBasedVariables()
         {
             round = 0;
+            suited = false;
+            pair = false;
+            lowStraightChance = false;
+            highStraightChance = false;
+            highCard = false;
+            doubleHighCard = false;
+            possibleMoves = null;
         }
     }
 
