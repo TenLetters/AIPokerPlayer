@@ -439,7 +439,7 @@
             // 
             // pictureBoxPSevenCardOne
             // 
-            this.pictureBoxPSevenCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPSevenCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPSevenCardOne.Location = new System.Drawing.Point(647, 382);
             this.pictureBoxPSevenCardOne.Name = "pictureBoxPSevenCardOne";
             this.pictureBoxPSevenCardOne.Size = new System.Drawing.Size(35, 51);
@@ -449,7 +449,7 @@
             // 
             // pictureBoxPSevenCardTwo
             // 
-            this.pictureBoxPSevenCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPSevenCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPSevenCardTwo.Location = new System.Drawing.Point(688, 382);
             this.pictureBoxPSevenCardTwo.Name = "pictureBoxPSevenCardTwo";
             this.pictureBoxPSevenCardTwo.Size = new System.Drawing.Size(35, 51);
@@ -459,7 +459,7 @@
             // 
             // pictureBoxPEightCardTwo
             // 
-            this.pictureBoxPEightCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPEightCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPEightCardTwo.Location = new System.Drawing.Point(684, 146);
             this.pictureBoxPEightCardTwo.Name = "pictureBoxPEightCardTwo";
             this.pictureBoxPEightCardTwo.Size = new System.Drawing.Size(35, 51);
@@ -469,7 +469,7 @@
             // 
             // pictureBoxPEightCardOne
             // 
-            this.pictureBoxPEightCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPEightCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPEightCardOne.Location = new System.Drawing.Point(643, 146);
             this.pictureBoxPEightCardOne.Name = "pictureBoxPEightCardOne";
             this.pictureBoxPEightCardOne.Size = new System.Drawing.Size(35, 51);
@@ -479,7 +479,7 @@
             // 
             // pictureBoxPSixCardTwo
             // 
-            this.pictureBoxPSixCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPSixCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPSixCardTwo.Location = new System.Drawing.Point(597, 423);
             this.pictureBoxPSixCardTwo.Name = "pictureBoxPSixCardTwo";
             this.pictureBoxPSixCardTwo.Size = new System.Drawing.Size(35, 51);
@@ -489,7 +489,7 @@
             // 
             // pictureBoxPSixCardOne
             // 
-            this.pictureBoxPSixCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPSixCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPSixCardOne.Location = new System.Drawing.Point(556, 423);
             this.pictureBoxPSixCardOne.Name = "pictureBoxPSixCardOne";
             this.pictureBoxPSixCardOne.Size = new System.Drawing.Size(35, 51);
@@ -499,7 +499,7 @@
             // 
             // pictureBoxPFiveCardTwo
             // 
-            this.pictureBoxPFiveCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPFiveCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPFiveCardTwo.Location = new System.Drawing.Point(462, 423);
             this.pictureBoxPFiveCardTwo.Name = "pictureBoxPFiveCardTwo";
             this.pictureBoxPFiveCardTwo.Size = new System.Drawing.Size(35, 51);
@@ -509,7 +509,7 @@
             // 
             // pictureBoxPFiveCardOne
             // 
-            this.pictureBoxPFiveCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPFiveCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPFiveCardOne.Location = new System.Drawing.Point(421, 423);
             this.pictureBoxPFiveCardOne.Name = "pictureBoxPFiveCardOne";
             this.pictureBoxPFiveCardOne.Size = new System.Drawing.Size(35, 51);
@@ -519,7 +519,7 @@
             // 
             // pictureBoxPFourCardTwo
             // 
-            this.pictureBoxPFourCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPFourCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPFourCardTwo.Location = new System.Drawing.Point(315, 423);
             this.pictureBoxPFourCardTwo.Name = "pictureBoxPFourCardTwo";
             this.pictureBoxPFourCardTwo.Size = new System.Drawing.Size(35, 51);
@@ -529,7 +529,7 @@
             // 
             // pictureBoxPFourCardOne
             // 
-            this.pictureBoxPFourCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPFourCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPFourCardOne.Location = new System.Drawing.Point(274, 423);
             this.pictureBoxPFourCardOne.Name = "pictureBoxPFourCardOne";
             this.pictureBoxPFourCardOne.Size = new System.Drawing.Size(35, 51);
@@ -539,7 +539,7 @@
             // 
             // pictureBoxPThreeCardTwo
             // 
-            this.pictureBoxPThreeCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPThreeCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPThreeCardTwo.Location = new System.Drawing.Point(166, 423);
             this.pictureBoxPThreeCardTwo.Name = "pictureBoxPThreeCardTwo";
             this.pictureBoxPThreeCardTwo.Size = new System.Drawing.Size(35, 51);
@@ -549,7 +549,7 @@
             // 
             // pictureBoxPThreeCardOne
             // 
-            this.pictureBoxPThreeCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPThreeCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPThreeCardOne.Location = new System.Drawing.Point(125, 423);
             this.pictureBoxPThreeCardOne.Name = "pictureBoxPThreeCardOne";
             this.pictureBoxPThreeCardOne.Size = new System.Drawing.Size(35, 51);
@@ -559,7 +559,7 @@
             // 
             // pictureBoxPTwoCardTwo
             // 
-            this.pictureBoxPTwoCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPTwoCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPTwoCardTwo.Location = new System.Drawing.Point(65, 382);
             this.pictureBoxPTwoCardTwo.Name = "pictureBoxPTwoCardTwo";
             this.pictureBoxPTwoCardTwo.Size = new System.Drawing.Size(35, 51);
@@ -569,7 +569,7 @@
             // 
             // pictureBoxPTwoCardOne
             // 
-            this.pictureBoxPTwoCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPTwoCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPTwoCardOne.Location = new System.Drawing.Point(24, 382);
             this.pictureBoxPTwoCardOne.Name = "pictureBoxPTwoCardOne";
             this.pictureBoxPTwoCardOne.Size = new System.Drawing.Size(35, 51);
@@ -579,7 +579,7 @@
             // 
             // pictureBoxPOneCardTwo
             // 
-            this.pictureBoxPOneCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPOneCardTwo.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPOneCardTwo.Location = new System.Drawing.Point(67, 146);
             this.pictureBoxPOneCardTwo.Name = "pictureBoxPOneCardTwo";
             this.pictureBoxPOneCardTwo.Size = new System.Drawing.Size(35, 51);
@@ -589,7 +589,7 @@
             // 
             // pictureBoxPOneCardOne
             // 
-            this.pictureBoxPOneCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_back;
+            this.pictureBoxPOneCardOne.Image = global::AIPokerPlayer.Properties.Resources.Playing_card_placement;
             this.pictureBoxPOneCardOne.Location = new System.Drawing.Point(24, 146);
             this.pictureBoxPOneCardOne.Name = "pictureBoxPOneCardOne";
             this.pictureBoxPOneCardOne.Size = new System.Drawing.Size(35, 51);

@@ -29,6 +29,7 @@ namespace AIPokerPlayer.UI
         List<List<PictureBox>> playerHands; //List of each players hands (their two cards)
         Image DEFAULT_CARDBACK = Image.FromFile("../../Resources/Playing-card-back.jpg");
         Image CARD_PLACEMENT = Image.FromFile("../../Resources/Playing-card-placement.jpg");
+        Image FOLDED_CARDBACK = Image.FromFile("../../Resources/Player-folded-back.jpg");
         int MAX_PLAYER_COUNT = 8;
         int revealedCardsCount;
         int minimumRaise;
@@ -234,14 +235,35 @@ namespace AIPokerPlayer.UI
 
         /*
        *   Param:
-       *   Hide all player hands
+       *   Hide all player hands who are active in the game, otherwise set to PLAYER_OUT_CARDBACK
        */
         public void hidePlayerHands()
         {
+            List<Player> activePlayers = game.getActivePlayerList();
             for (int j = 0; j < MAX_PLAYER_COUNT; j++)
             {
-                playerHands[j][0].Image = DEFAULT_CARDBACK;
-                playerHands[j][1].Image = DEFAULT_CARDBACK;
+                for(int i = 0; i < activePlayers.Count; i++)
+                {
+                    if (activePlayers[i].getPositionOnBoard() == j)
+                    {
+                        if (activePlayers[i].getMoveChoice() is Fold)
+                        {
+                            playerHands[j][0].Image = FOLDED_CARDBACK;
+                            playerHands[j][1].Image = FOLDED_CARDBACK;
+                        }
+                        else
+                        {
+                            playerHands[j][0].Image = DEFAULT_CARDBACK;
+                            playerHands[j][1].Image = DEFAULT_CARDBACK;
+                        }
+                        i = activePlayers.Count;//skip remaining
+                    }
+                    else
+                    {
+                        playerHands[j][0].Image = CARD_PLACEMENT;
+                        playerHands[j][1].Image = CARD_PLACEMENT;
+                    }
+                } 
             }
         }
 

@@ -73,7 +73,8 @@ namespace AIPokerPlayer.Players
             this.players = players;
             numRaisesThisRound = 0;
 
-            return getMoveBasedOnRound();
+            moveChoice = getMoveBasedOnRound();
+            return moveChoice;
             //call appropriate action method based on where we are in the round
         }
 
@@ -160,6 +161,10 @@ namespace AIPokerPlayer.Players
                 if (player.getChipCount() > highestChips)
                     highestChips = player.getChipCount();
             }
+            if(highestChips == 0)
+            {
+                highestChips = 1;
+            }
 
             // check if we are allowed to raise or call this turn
             // if we can, retrieve the minimum amounts associated with these actions
@@ -204,7 +209,9 @@ namespace AIPokerPlayer.Players
                     // we are the chip leader or very close and there are few players remaining
                     // play aggressively
                     numRaisesThisRound++;
-                    return new Raise(raiseAmount);
+                    Raise moveChoice = new Raise(raiseAmount);
+                    moveChoice.setRaiseAmount(raiseAmount);
+                    return moveChoice;
                 }
                 else
                 // either we are not high on the chip leaderboard or we have raised enough this round already
@@ -239,7 +246,9 @@ namespace AIPokerPlayer.Players
                     {
                         raiseAmount += Convert.ToInt32(getChipCount() * .1);
                         numRaisesThisRound++;
-                        return new Raise(raiseAmount);
+                        Raise moveChoice = new Raise(raiseAmount);
+                        moveChoice.setRaiseAmount(raiseAmount);
+                        return moveChoice;
                     }
                     else
                         return new Call(callAmount);
@@ -257,7 +266,9 @@ namespace AIPokerPlayer.Players
                     // bet 10% of our chips
                     raiseAmount +=  Convert.ToInt32(getChipCount() * .1);
                     numRaisesThisRound++;
-                    return new Raise(raiseAmount);
+                    Raise moveChoice = new Raise(raiseAmount);
+                    moveChoice.setRaiseAmount(raiseAmount);
+                    return moveChoice;
                 }
                 // otherwise call or check depending on the call amount
                 if (!canCall)
@@ -396,6 +407,10 @@ namespace AIPokerPlayer.Players
                     if (player.getChipCount() > highestChips)
                         highestChips = player.getChipCount();
                 }
+                if (highestChips == 0)
+                {
+                    highestChips = 1;
+                }
 
                 // check if we are allowed to raise or call this turn
                 // if we can, retrieve the minimum amounts associated with these actions
@@ -415,13 +430,15 @@ namespace AIPokerPlayer.Players
 
                 if (evalDifference >= 3)//significant strength compared to board, bully opponent
                 {
-                    if (getChipCount() / highestChips > .75)
+                    if ((getChipCount() / highestChips) > .60)
                     {
                         // we can try to bully the opponents
                         // bet a base of 10% of our chips
                         // hand strength is up to 8, add up to handStrength% of chips: 8 = 18% of our chips
                         raiseAmount += Convert.ToInt32(getChipCount() * (.1 + (((double)currentHandValue.getHandValue())/100)));
-                        return new Raise(raiseAmount);
+                        Raise moveChoice = new Raise(raiseAmount);
+                        moveChoice.setRaiseAmount(raiseAmount);
+                        return moveChoice;
                     }
                     // otherwise call or check depending on the call amount
                     if (!canCall)
@@ -429,7 +446,7 @@ namespace AIPokerPlayer.Players
                     else
                     {
                         // if the call amount is less than 10% of our chips, then 
-                        if (getChipCount() / callAmount > 20)
+                        if (( callAmount / getChipCount()) > .10)
                         {
                             return new Call(callAmount);
                         }
@@ -446,7 +463,7 @@ namespace AIPokerPlayer.Players
                         return new Check();
                     }
                     // if the call is a small percentage of our chips then make it
-                    else if (canCall && getChipCount() / callAmount < .05)
+                    else if (canCall && (callAmount / getChipCount()) > .05)
                     {
                         return new Call(callAmount);
                     }
@@ -553,6 +570,10 @@ namespace AIPokerPlayer.Players
                     if (player.getChipCount() > highestChips)
                         highestChips = player.getChipCount();
                 }
+                if (highestChips == 0)
+                {
+                    highestChips = 1;
+                }
 
                 // check if we are allowed to raise or call this turn
                 // if we can, retrieve the minimum amounts associated with these actions
@@ -577,7 +598,9 @@ namespace AIPokerPlayer.Players
                         // we can try to bully the opponents
                         // bet 10% of our chips
                         raiseAmount += Convert.ToInt32(getChipCount() * .1);
-                        return new Raise(raiseAmount);
+                        Raise moveChoice = new Raise(raiseAmount);
+                        moveChoice.setRaiseAmount(raiseAmount);
+                        return moveChoice;
                     }
                     // otherwise call or check depending on the call amount
                     if (!canCall)
@@ -662,6 +685,13 @@ namespace AIPokerPlayer.Players
         public void resetRoundBasedVariables()
         {
             round = 0;
+            suited = false;
+            pair = false;
+            lowStraightChance = false;
+            highStraightChance = false;
+            highCard = false;
+            doubleHighCard = false;
+            possibleMoves = null;
         }
     }
 

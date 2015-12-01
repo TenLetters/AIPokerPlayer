@@ -52,6 +52,8 @@ namespace AIPokerPlayer.Poker
 
         //Gets the current round we on
         public Round getCurrentRound() { return currentRound; }
+        //get active player list
+        public List<Player> getActivePlayerList() { return activePlayers; }
 
         // keep looping through rounds until a winner is determined
         // returns the winner

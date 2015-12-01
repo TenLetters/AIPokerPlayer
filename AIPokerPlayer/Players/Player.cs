@@ -18,7 +18,7 @@ namespace AIPokerPlayer.Players
         int positionOnBoard;
         private string name;
         protected List<Card> playerHand; // the player's two cards held in their hand
-        Move moveChoice;
+        protected Move moveChoice;
 
         public Player(string name, int startingChipCount, int position)
         {
