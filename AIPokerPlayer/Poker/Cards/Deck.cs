@@ -31,6 +31,8 @@ namespace AIPokerPlayer.Poker.Cards
         //Creates a deck ordered by each value in a suit, then moving to the next suit
         private void createOrderedDeck()
         {
+            deck = new List<Card>();
+
             foreach (Suit enumSuit in Enum.GetValues(typeof(Suit)))
             {
                 foreach (Value enumValue in Enum.GetValues(typeof(Value)))
@@ -60,7 +62,7 @@ namespace AIPokerPlayer.Poker.Cards
         {
             int n = deck.Count;
 
-            for(int i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
                 int r = i + (int)(random.NextDouble() * (n - i));
                 Card card = deck[r];
@@ -68,6 +70,7 @@ namespace AIPokerPlayer.Poker.Cards
                 deck[i] = card;
             }
             currentIndex = 0;
+            
         }
 
         // returns the next n cards from the top of the deck
