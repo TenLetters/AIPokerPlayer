@@ -81,7 +81,6 @@
             this.textPlayerEightName = new System.Windows.Forms.TextBox();
             this.radioPlayerEightHuman = new System.Windows.Forms.RadioButton();
             this.radioPlayerEightEmpty = new System.Windows.Forms.RadioButton();
-            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericStartChips)).BeginInit();
             this.panelPlayerOne.SuspendLayout();
             this.panelPlayerTwo.SuspendLayout();
@@ -669,21 +668,11 @@
             this.radioPlayerEightEmpty.UseVisualStyleBackColor = true;
             this.radioPlayerEightEmpty.CheckedChanged += new System.EventHandler(this.radioPlayerEightEmpty_CheckedChanged);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(317, 383);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 58;
-            this.label2.Text = "label2";
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(402, 435);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.panelPlayerEight);
             this.Controls.Add(this.panelPlayerSeven);
             this.Controls.Add(this.panelPlayerSix);
@@ -776,7 +765,6 @@
         private System.Windows.Forms.TextBox textPlayerEightName;
         private System.Windows.Forms.RadioButton radioPlayerEightHuman;
         private System.Windows.Forms.RadioButton radioPlayerEightEmpty;
-        private System.Windows.Forms.Label label2;
     }
 }
 

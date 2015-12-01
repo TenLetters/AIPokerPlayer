@@ -13,13 +13,16 @@ namespace AIPokerPlayer.Poker
 {
     // Written by Alex Ciaramella
     // one round of poker
-    class Round
+    public class Round
     {
 
         private HandEvaluator handEval = new HandEvaluator();
         private int highestChipsInPot = 0;
+        private int potAmount = 0;
         private GameForm gameForm;
+        private Player activePlayer = null;
         List<int> foldedPlayersPositions = new List<int>();
+        int DELAY_SPEED = 250; //Visually in MS, how long we delay AIs for their turns so we can see what they do
 
         // plays this round of poker with the given players
         // removes players from the list if they have been knocked out (0 chips)
@@ -35,7 +38,8 @@ namespace AIPokerPlayer.Poker
             
 
             // calculate the blinds and add them to the pot
-            int potAmount = calculateBlinds(players, indexOfBigBlindPlayer, bigBlindAmount);
+            potAmount = calculateBlinds(players, indexOfBigBlindPlayer, bigBlindAmount);
+            gameForm.setPotTotal(potAmount);
 
             // give each player their two starting cards
             dealStartingHands(players, deck);
@@ -43,13 +47,14 @@ namespace AIPokerPlayer.Poker
 
             // each round has 4 possible betting sessions : pre-flop, post-flop, post-turn, post-river
             for(int i = 0; i < 4; i++)
-            {
+            { 
                 // check to make sure there is atleast 2 players who havent folded yet or else we have a winner
                 int remainingPlayers = players.Count - foldedPlayersPositions.Count;
                 if (remainingPlayers > 1)
                 {
                     // add flop, turn, river cards to player hands
                     progressGameState(players, deck);
+                    System.Threading.Thread.Sleep(DELAY_SPEED);
                     performAllMoves(players, foldedPlayersPositions, remainingPlayers, indexOfBigBlindPlayer);
                 }
                 else
@@ -66,12 +71,23 @@ namespace AIPokerPlayer.Poker
             Player winner = determineWinner(players, foldedPlayersPositions);
             winner.modifyChipCount(potAmount);
 
+            //Update our history with the round winner information
+            List<Card> winningHand = winner.getPlayerHand();
+            gameForm.appendHistory(Environment.NewLine + winner.getName() + " has won the round!");
+            gameForm.appendHistory("Pot Winnings: " + potAmount);
+            gameForm.appendHistory("Winning Hand: " + winningHand[0].toString() + " and " + winningHand[1].toString());
+
+            gameForm.setPotTotal(0);
             gameForm.updatePlayerChipCount(winner);
             gameForm.clearRevealedCards();
 
             return winner;  
         }
-        
+
+        public Player getActivePlayer() { return activePlayer; }
+        public int getPotAmount() { return potAmount; }
+        public int getHighestChipsInPot() { return highestChipsInPot; }
+
         // calculates the small and large blinds and adds them to the pot
         private int calculateBlinds(List<Player> players, int indexOfBigBlindPlayer, int bigBlindAmount)
         {
@@ -86,9 +102,15 @@ namespace AIPokerPlayer.Poker
             // take the small and big blinds from the players
             bigBlindAmount = players[indexOfBigBlindPlayer].modifyChipCount(-bigBlindAmount);
             players[indexOfBigBlindPlayer].addToChipsInCurrentPot(bigBlindAmount);
+            //UI for Big Blinds
+            gameForm.appendHistory("Round Big Blind: " + bigBlindAmount);
+            gameForm.appendHistory(players[indexOfBigBlindPlayer].getName() + " has paid the big blind.");
 
             smallBlindAmount = players[indexOfSmallBlindPlayer].modifyChipCount(-smallBlindAmount);
             players[indexOfSmallBlindPlayer].addToChipsInCurrentPot(smallBlindAmount);
+            //UI for small Blinds
+            gameForm.appendHistory("Round Small Blind: " + smallBlindAmount);
+            gameForm.appendHistory(players[indexOfSmallBlindPlayer].getName() + " has paid the small blind.");
 
             if (bigBlindAmount > smallBlindAmount)
                 highestChipsInPot = bigBlindAmount;
@@ -98,6 +120,9 @@ namespace AIPokerPlayer.Poker
             // update UI
             gameForm.updatePlayerChipCount(players[indexOfBigBlindPlayer]);
             gameForm.updatePlayerChipCount(players[indexOfSmallBlindPlayer]);
+
+            gameForm.appendHistory("");//new line
+
             return bigBlindAmount + smallBlindAmount;
         }
 
@@ -145,6 +170,8 @@ namespace AIPokerPlayer.Poker
             int turnsTaken = 0;
 
             int playersFoldedThisRound = 0;
+
+            gameForm.setBigBlindPlayer(players[lastToMove]);
             // loop through all moves
             for (int i = findPlayer(players, indexOfBigBlindPlayer, 1); ; i++)
             {
@@ -152,9 +179,13 @@ namespace AIPokerPlayer.Poker
                 if (!foldedPlayersPositions.Contains(i))
                 {
                     // update Ui to show player's cards
-                    gameForm.showPlayerHand(players[i]);
+                    gameForm.updateForPlayerTurn(players[i]);
+                    gameForm.appendHistory(players[i].getName() + "'s turn.");
 
-                    System.Threading.Thread.Sleep(1000);
+                    activePlayer = players[i];//set the currently active player
+
+                    //Slow down during AI turns
+                    System.Threading.Thread.Sleep(DELAY_SPEED);
 
                     // check possible moves for the player
                     List<Move> possibleMoves = new List<Move>();
@@ -182,12 +213,15 @@ namespace AIPokerPlayer.Poker
                     gameForm.setAvailableButtons(possibleMoves);
 
                     // get the players move
-                    Move selectedMove = null; // players[i].requestAction(possibleMoves);
+                    Move selectedMove = null;
+                    players[i].setMoveChoice(null);
+                    selectedMove = players[i].requestAction(possibleMoves);
                     if (selectedMove is Fold)
                     {
                         // if fold, add to folded player list, increment playersFoldedThisRound
                         foldedPlayersPositions.Add(i);
                         playersFoldedThisRound++;
+                        gameForm.appendHistory(players[i].getName() + " folded.");
                     }
                     else if (selectedMove is Raise)
                     {
@@ -197,6 +231,9 @@ namespace AIPokerPlayer.Poker
                         players[i].addToChipsInCurrentPot(raiseAmount);
                         // update the pot contribution leader for this round
                         highestChipsInPot = players[i].getChipsInCurrentPot();
+                        potAmount = potAmount + raiseAmount;
+                        gameForm.appendHistory(players[i].getName() + " raised by " + raiseAmount + ".");
+                        gameForm.appendHistory("Current call total: " + highestChipsInPot + ".");
                         // everyone needs a new turn to react to the raise
                         turnsTaken = 0;
                     }
@@ -204,12 +241,27 @@ namespace AIPokerPlayer.Poker
                     {
                         // if call, take bet and add to pot
                         int callAmount = highestChipsInPot - players[i].getChipsInCurrentPot();
-                        callAmount = players[i].modifyChipCount(-callAmount);
+                        //callAmount = players[i].modifyChipCount(-callAmount);
+                        players[i].modifyChipCount(-callAmount);
                         players[i].addToChipsInCurrentPot(callAmount);
+                        potAmount = potAmount + callAmount;
+                        gameForm.appendHistory(players[i].getName() + " called and put " + callAmount + " into the pot.");
+
 
                     }
-                    // if check, do nothing
+                    else if (selectedMove is Check) // if check, only update history
+                    {
+                        gameForm.appendHistory(players[i].getName() + " checked.");
+                    }
+                    
                     turnsTaken++;
+                    if (selectedMove == null)//for testing while ai doesn't make a move
+                    {
+                        gameForm.appendHistory("Move was null. Turn Skipped.");
+                    }
+
+                    gameForm.updatePlayerChipCount(players[i]);
+                    gameForm.setPotTotal(potAmount);
 
                     // if we still have more moves to make but are at the end of the player list, reset the index to -1 (incremented to 0 at start 
                     if (turnsTaken < remainingPlayers && i == players.Count - 1)
@@ -225,7 +277,15 @@ namespace AIPokerPlayer.Poker
         private void progressGameState(List<Player> players, Deck deck)
         {
             List<Card> boardCards = deck.getBoardCards();
+            if (boardCards.Count > 0)//Special case: only appends a new line for post-flop and beyond for formatting purposes
+            {
+                gameForm.appendHistory(""); //new line
+            }
             gameForm.revealBoardCards(boardCards);
+            if (boardCards.Count > 0)//Special case: only appends a new line for post-flop and beyond for formatting purposes
+            {
+                gameForm.appendHistory(""); //new line
+            }
 
             foreach (Player player in players)
                 player.addCardsToHand(boardCards);

@@ -132,10 +132,7 @@ namespace AIPokerPlayer
             finalizeSettings();
             this.Hide();
             //Pass 'this' to the next controller object
-            Game game = new Game(players);
-
-            //GameForm gameForm = new GameForm();
-            //gameForm.Show();
+            Game game = new Game(players);  
         }
 
         //Player One Radio Events

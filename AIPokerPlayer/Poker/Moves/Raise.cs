@@ -13,7 +13,14 @@ namespace AIPokerPlayer.Poker.Moves
 
         public Raise(int minimumAmount)
         {
-            this.minimumRaise = minimumAmount;
+            if (minimumAmount > 0) //minimum raise is 1
+            {
+                this.minimumRaise = minimumAmount;
+            }
+            else
+            {
+                this.minimumRaise = 1;
+            }
         }
 
         public int getMinimumRaise()
@@ -29,6 +36,12 @@ namespace AIPokerPlayer.Poker.Moves
         public void setRaiseAmount(int amount)
         {
             this.raiseAmount = amount;
+        }
+
+        public override String toString()
+        {
+            String s = "Raise";
+            return s;
         }
     }
 }

@@ -36,6 +36,12 @@ namespace AIPokerPlayer.Poker.Cards
             }
             //myImage = CreateNonIndexedImage(imageLocation);
         }
+
+        public String toString()
+        {
+            String s = value + " of " + suit;
+            return s;
+        }
     }
 
 }

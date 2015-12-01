@@ -39,7 +39,7 @@
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.newGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownRaiseAmount = new System.Windows.Forms.NumericUpDown();
             this.buttonRaise = new System.Windows.Forms.Button();
             this.pOneName = new System.Windows.Forms.Label();
             this.pTwoName = new System.Windows.Forms.Label();
@@ -91,8 +91,16 @@
             this.pictureBoxFlopThree = new System.Windows.Forms.PictureBox();
             this.pictureBoxTurn = new System.Windows.Forms.PictureBox();
             this.pictureBoxRiver = new System.Windows.Forms.PictureBox();
+            this.labelBigBlindPlayerName = new System.Windows.Forms.Label();
+            this.labelBigBlind = new System.Windows.Forms.Label();
+            this.textBoxHistory = new System.Windows.Forms.TextBox();
+            this.labelHistory = new System.Windows.Forms.Label();
+            this.labelPotAmount = new System.Windows.Forms.Label();
+            this.labelPotTotal = new System.Windows.Forms.Label();
+            this.labelPotContribution = new System.Windows.Forms.Label();
+            this.labelPotContributionAmount = new System.Windows.Forms.Label();
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRaiseAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFlopOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPSevenCardOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPSevenCardTwo)).BeginInit();
@@ -130,7 +138,7 @@
             // labelPlayerTurn
             // 
             this.labelPlayerTurn.AutoSize = true;
-            this.labelPlayerTurn.Location = new System.Drawing.Point(13, 483);
+            this.labelPlayerTurn.Location = new System.Drawing.Point(13, 491);
             this.labelPlayerTurn.Name = "labelPlayerTurn";
             this.labelPlayerTurn.Size = new System.Drawing.Size(71, 13);
             this.labelPlayerTurn.TabIndex = 0;
@@ -139,7 +147,7 @@
             // labelPlayerNameTurn
             // 
             this.labelPlayerNameTurn.AutoSize = true;
-            this.labelPlayerNameTurn.Location = new System.Drawing.Point(89, 483);
+            this.labelPlayerNameTurn.Location = new System.Drawing.Point(105, 491);
             this.labelPlayerNameTurn.Name = "labelPlayerNameTurn";
             this.labelPlayerNameTurn.Size = new System.Drawing.Size(83, 13);
             this.labelPlayerNameTurn.TabIndex = 1;
@@ -153,6 +161,7 @@
             this.buttonCheck.TabIndex = 2;
             this.buttonCheck.Text = "Check";
             this.buttonCheck.UseVisualStyleBackColor = true;
+            this.buttonCheck.Click += new System.EventHandler(this.buttonCheck_Click);
             // 
             // buttonFold
             // 
@@ -162,6 +171,7 @@
             this.buttonFold.TabIndex = 3;
             this.buttonFold.Text = "Fold";
             this.buttonFold.UseVisualStyleBackColor = true;
+            this.buttonFold.Click += new System.EventHandler(this.buttonFold_Click);
             // 
             // buttonCall
             // 
@@ -171,6 +181,7 @@
             this.buttonCall.TabIndex = 4;
             this.buttonCall.Text = "Call";
             this.buttonCall.UseVisualStyleBackColor = true;
+            this.buttonCall.Click += new System.EventHandler(this.buttonCall_Click);
             // 
             // printPreviewDialog1
             // 
@@ -188,7 +199,7 @@
             this.toolStripDropDownButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(782, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1067, 25);
             this.toolStrip1.TabIndex = 8;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -210,20 +221,22 @@
             this.newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
             this.newGameToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.newGameToolStripMenuItem.Text = "New Game";
+            this.newGameToolStripMenuItem.Click += new System.EventHandler(this.newGameToolStripMenuItem_Click);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
             this.quitToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.quitToolStripMenuItem.Text = "Quit";
+            this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
-            // numericUpDown1
+            // numericUpDownRaiseAmount
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(556, 503);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 9;
-            this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numericUpDownRaiseAmount.Location = new System.Drawing.Point(556, 503);
+            this.numericUpDownRaiseAmount.Name = "numericUpDownRaiseAmount";
+            this.numericUpDownRaiseAmount.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDownRaiseAmount.TabIndex = 9;
+            this.numericUpDownRaiseAmount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // buttonRaise
             // 
@@ -233,6 +246,7 @@
             this.buttonRaise.TabIndex = 10;
             this.buttonRaise.Text = "Raise";
             this.buttonRaise.UseVisualStyleBackColor = true;
+            this.buttonRaise.Click += new System.EventHandler(this.buttonRaise_Click);
             // 
             // pOneName
             // 
@@ -241,9 +255,9 @@
             this.pOneName.ForeColor = System.Drawing.SystemColors.ControlText;
             this.pOneName.Location = new System.Drawing.Point(23, 102);
             this.pOneName.Name = "pOneName";
-            this.pOneName.Size = new System.Drawing.Size(61, 13);
+            this.pOneName.Size = new System.Drawing.Size(48, 13);
             this.pOneName.TabIndex = 12;
-            this.pOneName.Text = "pOneName";
+            this.pOneName.Text = "<Empty>";
             // 
             // pTwoName
             // 
@@ -251,9 +265,9 @@
             this.pTwoName.BackColor = System.Drawing.Color.White;
             this.pTwoName.Location = new System.Drawing.Point(21, 341);
             this.pTwoName.Name = "pTwoName";
-            this.pTwoName.Size = new System.Drawing.Size(62, 13);
+            this.pTwoName.Size = new System.Drawing.Size(48, 13);
             this.pTwoName.TabIndex = 13;
-            this.pTwoName.Text = "pTwoName";
+            this.pTwoName.Text = "<Empty>";
             // 
             // pThreeName
             // 
@@ -261,9 +275,9 @@
             this.pThreeName.BackColor = System.Drawing.Color.White;
             this.pThreeName.Location = new System.Drawing.Point(122, 382);
             this.pThreeName.Name = "pThreeName";
-            this.pThreeName.Size = new System.Drawing.Size(69, 13);
+            this.pThreeName.Size = new System.Drawing.Size(48, 13);
             this.pThreeName.TabIndex = 14;
-            this.pThreeName.Text = "pThreeName";
+            this.pThreeName.Text = "<Empty>";
             // 
             // pFourName
             // 
@@ -271,9 +285,9 @@
             this.pFourName.BackColor = System.Drawing.Color.White;
             this.pFourName.Location = new System.Drawing.Point(271, 382);
             this.pFourName.Name = "pFourName";
-            this.pFourName.Size = new System.Drawing.Size(62, 13);
+            this.pFourName.Size = new System.Drawing.Size(48, 13);
             this.pFourName.TabIndex = 15;
-            this.pFourName.Text = "pFourName";
+            this.pFourName.Text = "<Empty>";
             // 
             // pFiveName
             // 
@@ -281,9 +295,9 @@
             this.pFiveName.BackColor = System.Drawing.Color.White;
             this.pFiveName.Location = new System.Drawing.Point(418, 382);
             this.pFiveName.Name = "pFiveName";
-            this.pFiveName.Size = new System.Drawing.Size(61, 13);
+            this.pFiveName.Size = new System.Drawing.Size(48, 13);
             this.pFiveName.TabIndex = 16;
-            this.pFiveName.Text = "pFiveName";
+            this.pFiveName.Text = "<Empty>";
             // 
             // pSixName
             // 
@@ -291,9 +305,9 @@
             this.pSixName.BackColor = System.Drawing.Color.White;
             this.pSixName.Location = new System.Drawing.Point(553, 382);
             this.pSixName.Name = "pSixName";
-            this.pSixName.Size = new System.Drawing.Size(55, 13);
+            this.pSixName.Size = new System.Drawing.Size(48, 13);
             this.pSixName.TabIndex = 17;
-            this.pSixName.Text = "pSixName";
+            this.pSixName.Text = "<Empty>";
             // 
             // pSevenName
             // 
@@ -301,9 +315,9 @@
             this.pSevenName.BackColor = System.Drawing.Color.White;
             this.pSevenName.Location = new System.Drawing.Point(643, 341);
             this.pSevenName.Name = "pSevenName";
-            this.pSevenName.Size = new System.Drawing.Size(72, 13);
+            this.pSevenName.Size = new System.Drawing.Size(48, 13);
             this.pSevenName.TabIndex = 18;
-            this.pSevenName.Text = "pSevenName";
+            this.pSevenName.Text = "<Empty>";
             // 
             // pEightName
             // 
@@ -311,14 +325,14 @@
             this.pEightName.BackColor = System.Drawing.Color.White;
             this.pEightName.Location = new System.Drawing.Point(643, 102);
             this.pEightName.Name = "pEightName";
-            this.pEightName.Size = new System.Drawing.Size(65, 13);
+            this.pEightName.Size = new System.Drawing.Size(48, 13);
             this.pEightName.TabIndex = 19;
-            this.pEightName.Text = "pEightName";
+            this.pEightName.Text = "<Empty>";
             // 
             // labelRound
             // 
             this.labelRound.AutoSize = true;
-            this.labelRound.Location = new System.Drawing.Point(41, 505);
+            this.labelRound.Location = new System.Drawing.Point(13, 25);
             this.labelRound.Name = "labelRound";
             this.labelRound.Size = new System.Drawing.Size(42, 13);
             this.labelRound.TabIndex = 20;
@@ -327,7 +341,7 @@
             // labelRoundCount
             // 
             this.labelRoundCount.AutoSize = true;
-            this.labelRoundCount.Location = new System.Drawing.Point(89, 505);
+            this.labelRoundCount.Location = new System.Drawing.Point(61, 25);
             this.labelRoundCount.Name = "labelRoundCount";
             this.labelRoundCount.Size = new System.Drawing.Size(13, 13);
             this.labelRoundCount.TabIndex = 21;
@@ -732,11 +746,96 @@
             this.pictureBoxRiver.TabIndex = 65;
             this.pictureBoxRiver.TabStop = false;
             // 
+            // labelBigBlindPlayerName
+            // 
+            this.labelBigBlindPlayerName.AutoSize = true;
+            this.labelBigBlindPlayerName.Location = new System.Drawing.Point(137, 25);
+            this.labelBigBlindPlayerName.Name = "labelBigBlindPlayerName";
+            this.labelBigBlindPlayerName.Size = new System.Drawing.Size(102, 13);
+            this.labelBigBlindPlayerName.TabIndex = 67;
+            this.labelBigBlindPlayerName.Text = "bigBlindPlaceHolder";
+            // 
+            // labelBigBlind
+            // 
+            this.labelBigBlind.AutoSize = true;
+            this.labelBigBlind.Location = new System.Drawing.Point(80, 25);
+            this.labelBigBlind.Name = "labelBigBlind";
+            this.labelBigBlind.Size = new System.Drawing.Size(51, 13);
+            this.labelBigBlind.TabIndex = 66;
+            this.labelBigBlind.Text = "Big Blind:";
+            // 
+            // textBoxHistory
+            // 
+            this.textBoxHistory.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.textBoxHistory.Location = new System.Drawing.Point(764, 46);
+            this.textBoxHistory.Multiline = true;
+            this.textBoxHistory.Name = "textBoxHistory";
+            this.textBoxHistory.ReadOnly = true;
+            this.textBoxHistory.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxHistory.Size = new System.Drawing.Size(291, 434);
+            this.textBoxHistory.TabIndex = 68;
+            // 
+            // labelHistory
+            // 
+            this.labelHistory.AutoSize = true;
+            this.labelHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelHistory.Location = new System.Drawing.Point(873, 16);
+            this.labelHistory.Name = "labelHistory";
+            this.labelHistory.Size = new System.Drawing.Size(79, 25);
+            this.labelHistory.TabIndex = 70;
+            this.labelHistory.Text = "History";
+            // 
+            // labelPotAmount
+            // 
+            this.labelPotAmount.AutoSize = true;
+            this.labelPotAmount.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPotAmount.Location = new System.Drawing.Point(310, 13);
+            this.labelPotAmount.Name = "labelPotAmount";
+            this.labelPotAmount.Size = new System.Drawing.Size(106, 25);
+            this.labelPotAmount.TabIndex = 71;
+            this.labelPotAmount.Text = "Pot Total:";
+            // 
+            // labelPotTotal
+            // 
+            this.labelPotTotal.AutoSize = true;
+            this.labelPotTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPotTotal.Location = new System.Drawing.Point(417, 13);
+            this.labelPotTotal.Name = "labelPotTotal";
+            this.labelPotTotal.Size = new System.Drawing.Size(24, 25);
+            this.labelPotTotal.TabIndex = 72;
+            this.labelPotTotal.Text = "0";
+            // 
+            // labelPotContribution
+            // 
+            this.labelPotContribution.AutoSize = true;
+            this.labelPotContribution.Location = new System.Drawing.Point(13, 510);
+            this.labelPotContribution.Name = "labelPotContribution";
+            this.labelPotContribution.Size = new System.Drawing.Size(85, 13);
+            this.labelPotContribution.TabIndex = 73;
+            this.labelPotContribution.Text = "Pot Contribution:";
+            // 
+            // labelPotContributionAmount
+            // 
+            this.labelPotContributionAmount.AutoSize = true;
+            this.labelPotContributionAmount.Location = new System.Drawing.Point(105, 510);
+            this.labelPotContributionAmount.Name = "labelPotContributionAmount";
+            this.labelPotContributionAmount.Size = new System.Drawing.Size(13, 13);
+            this.labelPotContributionAmount.TabIndex = 74;
+            this.labelPotContributionAmount.Text = "0";
+            // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(782, 535);
+            this.ClientSize = new System.Drawing.Size(1067, 535);
+            this.Controls.Add(this.labelPotContributionAmount);
+            this.Controls.Add(this.labelPotContribution);
+            this.Controls.Add(this.labelPotTotal);
+            this.Controls.Add(this.labelPotAmount);
+            this.Controls.Add(this.labelHistory);
+            this.Controls.Add(this.textBoxHistory);
+            this.Controls.Add(this.labelBigBlindPlayerName);
+            this.Controls.Add(this.labelBigBlind);
             this.Controls.Add(this.pictureBoxRiver);
             this.Controls.Add(this.pictureBoxTurn);
             this.Controls.Add(this.pictureBoxFlopThree);
@@ -786,7 +885,7 @@
             this.Controls.Add(this.pOneName);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.buttonRaise);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.numericUpDownRaiseAmount);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.buttonCall);
@@ -800,7 +899,7 @@
             this.Load += new System.EventHandler(this.GameForm_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRaiseAmount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFlopOne)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPSevenCardOne)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPSevenCardTwo)).EndInit();
@@ -852,7 +951,7 @@
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem newGameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown numericUpDownRaiseAmount;
         private System.Windows.Forms.Button buttonRaise;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.Label pOneName;
@@ -902,5 +1001,13 @@
         private System.Windows.Forms.PictureBox pictureBoxFlopThree;
         private System.Windows.Forms.PictureBox pictureBoxTurn;
         private System.Windows.Forms.PictureBox pictureBoxRiver;
+        private System.Windows.Forms.Label labelBigBlindPlayerName;
+        private System.Windows.Forms.Label labelBigBlind;
+        private System.Windows.Forms.TextBox textBoxHistory;
+        private System.Windows.Forms.Label labelHistory;
+        private System.Windows.Forms.Label labelPotAmount;
+        private System.Windows.Forms.Label labelPotTotal;
+        private System.Windows.Forms.Label labelPotContribution;
+        private System.Windows.Forms.Label labelPotContributionAmount;
     }
 }
