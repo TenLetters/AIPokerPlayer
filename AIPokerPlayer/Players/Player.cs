@@ -39,7 +39,7 @@ namespace AIPokerPlayer.Players
         // returns the player's hand
         public List<Card> getPlayerHand()
         {
-            return playerHand;
+            return new List<Card>(playerHand);
         }
 
         // adds the cards to the player's hand

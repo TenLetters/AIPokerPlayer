@@ -151,7 +151,7 @@ namespace AIPokerPlayer.Players
             Boolean canCall = false;
             int raiseAmount = 1;
             int callAmount = 1;
-            int highestChips = 0;
+            int highestChips = 1;
 
             // check which player in the list has the highest chips
             // the list of players will contain all other players still in the hand, excluding ourself
@@ -501,7 +501,7 @@ namespace AIPokerPlayer.Players
             {
                 foreach (Value enumValue in Enum.GetValues(typeof(Value)))
                 {
-                    possibleHand = playerHand;
+                    possibleHand = new List<Card>(playerHand);
                     possibleHand.Add(new Card(enumValue, enumSuit));
                     currentResult = handEval.evaluateHand(possibleHand);
                     result[currentResult.getHandValue()] += 1;

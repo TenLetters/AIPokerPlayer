@@ -749,7 +749,7 @@
             // labelBigBlindPlayerName
             // 
             this.labelBigBlindPlayerName.AutoSize = true;
-            this.labelBigBlindPlayerName.Location = new System.Drawing.Point(137, 25);
+            this.labelBigBlindPlayerName.Location = new System.Drawing.Point(172, 25);
             this.labelBigBlindPlayerName.Name = "labelBigBlindPlayerName";
             this.labelBigBlindPlayerName.Size = new System.Drawing.Size(102, 13);
             this.labelBigBlindPlayerName.TabIndex = 67;
@@ -758,7 +758,7 @@
             // labelBigBlind
             // 
             this.labelBigBlind.AutoSize = true;
-            this.labelBigBlind.Location = new System.Drawing.Point(80, 25);
+            this.labelBigBlind.Location = new System.Drawing.Point(119, 25);
             this.labelBigBlind.Name = "labelBigBlind";
             this.labelBigBlind.Size = new System.Drawing.Size(51, 13);
             this.labelBigBlind.TabIndex = 66;
