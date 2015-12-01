@@ -21,6 +21,7 @@ namespace AIPokerPlayer.UI
 {
     public partial class GameForm : Form
     {
+        Game game; //reference to the modal game object
 
         List<Label> labelPlayerNames; //List of player name labels
         List<Label> labelChipCount; //List of player chip count labels
@@ -30,10 +31,12 @@ namespace AIPokerPlayer.UI
         Image CARD_PLACEMENT = Image.FromFile("../../Resources/Playing-card-placement.jpg");
         int MAX_PLAYER_COUNT = 8;
         int revealedCardsCount;
+        int minimumRaise;
 
-        public GameForm()
+        public GameForm(Game game)
         {
             InitializeComponent();
+            this.game = game;
             revealedCardsCount = 0;
             labelPlayerNames = new List<Label>();
             labelChipCount = new List<Label>();
@@ -110,8 +113,8 @@ namespace AIPokerPlayer.UI
             playerHand.Add(pictureBoxPEightCardTwo);
             playerHands.Add(playerHand);
 
-            numericUpDown1.Maximum = int.MaxValue;
-            numericUpDown1.Minimum = 0;
+            numericUpDownRaiseAmount.Maximum = int.MaxValue;
+            numericUpDownRaiseAmount.Minimum = 0;
 
             //Mini test suite
             /*
@@ -254,6 +257,7 @@ namespace AIPokerPlayer.UI
                 {
                     revealedCards[revealedCardsCount].Image = card.getImage();
                     revealedCardsCount++;
+                    appendHistory("Revealed: " + card.toString());
                 }
                 else
                 {
@@ -291,14 +295,79 @@ namespace AIPokerPlayer.UI
         }
 
         /*
-       *   Param: Player
-       *   Update the current player turn to Player's name
-       */
+        *   Param: Player
+        *   Update the necessary UI information for a player's turn
+        */
+        public void updateForPlayerTurn(Player player)
+        {
+            showPlayerHand(player);
+            setPlayerTurn(player);
+            setPlayerPotContribution(player);
+            setCallAmount(player);
+        }
+
+        /*
+         *   Param: Player
+         *   Update the current player turn to Player's name
+         */
         public void setPlayerTurn(Player player)
         {
             this.Invoke((MethodInvoker)delegate
             {
                 labelPlayerNameTurn.Text = player.getName();
+            });
+
+        }
+
+        /*
+       *   Param: Player
+       *   Update the player's pot contribution
+       */
+        public void setPlayerPotContribution(Player player)
+        {
+            this.Invoke((MethodInvoker)delegate
+            {
+                labelPotContributionAmount.Text = player.getChipsInCurrentPot().ToString();
+            });
+
+        }
+
+        /*
+       *   Param: Player
+       *   Update the how much a player would need to pay to call
+       */
+        public void setCallAmount(Player player)
+        {
+            this.Invoke((MethodInvoker)delegate
+            {
+                int difference = game.getCurrentRound().getHighestChipsInPot()-player.getChipsInCurrentPot();
+                buttonCall.Text = "Call: " + difference.ToString();
+            });
+
+        }
+
+        /*
+        *   Param: Player
+        *   Update the current big blind player
+        */
+        public void setBigBlindPlayer(Player player)
+        {
+            this.Invoke((MethodInvoker)delegate
+            {
+                labelBigBlindPlayerName.Text = player.getName();
+            });
+
+        }
+
+        /*
+        *   Param: int
+        *   Update the pot total
+        */
+        public void setPotTotal(int i)
+        {
+            this.Invoke((MethodInvoker)delegate
+            {
+                labelPotTotal.Text = i.ToString();
             });
         }
 
@@ -308,7 +377,22 @@ namespace AIPokerPlayer.UI
         */
         public void setRound(int i)
         {
-            labelRoundCount.Text = i.ToString();
+            this.Invoke((MethodInvoker)delegate
+            {
+                labelRoundCount.Text = i.ToString();
+            });
+        }
+
+        /*
+        *   Param: String
+        *   Adds the string to a new line in the history text box
+        */
+        public void appendHistory(String line)
+        {
+            this.Invoke((MethodInvoker)delegate
+            {
+                textBoxHistory.AppendText(line + Environment.NewLine);
+            });
         }
 
         /*
@@ -317,13 +401,16 @@ namespace AIPokerPlayer.UI
         */
         public void setAvailableButtons(List<Move> moves)
         {
+            disableAllButtons();
             foreach (Move move in moves)
             {
                 if (move is Raise)
                 {
                     this.Invoke((MethodInvoker)delegate {
-                        numericUpDown1.Value = ((Raise)move).getMinimumRaise();
+                        minimumRaise = ((Raise)move).getMinimumRaise();
+                        numericUpDownRaiseAmount.Value = minimumRaise;
                         buttonRaise.Enabled = true;
+                        numericUpDownRaiseAmount.Enabled = true;
                     });
                 }
 
@@ -359,15 +446,132 @@ namespace AIPokerPlayer.UI
         */
         public void disableAllButtons()
         {
-            buttonRaise.Enabled = false;
-            buttonCall.Enabled = false;
-            buttonCheck.Enabled = false;
-            buttonFold.Enabled = false;
+            this.Invoke((MethodInvoker)delegate
+            {
+                buttonRaise.Enabled = false;
+            });
+            this.Invoke((MethodInvoker)delegate
+            {
+                buttonCall.Enabled = false;
+            });
+            this.Invoke((MethodInvoker)delegate
+            {
+                buttonCheck.Enabled = false;
+            });
+            this.Invoke((MethodInvoker)delegate
+            {
+                buttonFold.Enabled = false;
+            });
+            this.Invoke((MethodInvoker)delegate
+            {
+                numericUpDownRaiseAmount.Enabled = false;
+            });
         }
 
         private void GameForm_Load(object sender, EventArgs e)
         {
 
+        }
+
+        //Quit Button: fully exits the application
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Environment.Exit(1);
+        }
+
+        //New Game Button: creates a new settings form and quits this window
+        //We will have to shut down all other threads.
+        private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            game.shutDownWorkingThreads();
+            SettingsForm newGame = new SettingsForm();
+            newGame.Show();
+            this.Close();
+        }
+
+        //Check Button: create Move check and set it for the player
+        private void buttonCheck_Click(object sender, EventArgs e)
+        {
+            Move moveChoice = new Check();
+            Player activePlayer = game.getCurrentRound().getActivePlayer();
+            if(activePlayer != null)
+            {
+                activePlayer.setMoveChoice(moveChoice);
+            }
+            else
+            {
+                throw new Exception("activePlayer was null while attempting to check in GameForm.");
+            }
+
+        }
+
+        //Fold Button:
+        private void buttonFold_Click(object sender, EventArgs e)
+        {
+            Move moveChoice = new Fold();
+            Player activePlayer = game.getCurrentRound().getActivePlayer();
+            if (activePlayer != null)
+            {
+                activePlayer.setMoveChoice(moveChoice);
+            }
+            else
+            {
+                throw new Exception("activePlayer was null while attempting to fold in GameForm.");
+            }
+        }
+
+        //Call Button:
+        private void buttonCall_Click(object sender, EventArgs e)
+        {
+            int raiseAmount = 0;
+            Move moveChoice = new Call(raiseAmount);
+            Player activePlayer = game.getCurrentRound().getActivePlayer();
+            if (activePlayer != null)
+            {
+                activePlayer.setMoveChoice(moveChoice);
+            }
+            else
+            {
+                throw new Exception("activePlayer was null while attempting to call in GameForm.");
+            }
+        }
+
+        //Raise Button:
+        private void buttonRaise_Click(object sender, EventArgs e)
+        {
+            int raiseAmount = (int)numericUpDownRaiseAmount.Value;
+            int playerChipCount = game.getCurrentRound().getActivePlayer().getChipCount();
+            if (raiseAmount >= minimumRaise)
+            {
+                if (playerChipCount >= raiseAmount)
+                {
+                    Raise moveChoice = new Raise(raiseAmount);
+                    moveChoice.setRaiseAmount(raiseAmount);
+                    Player activePlayer = game.getCurrentRound().getActivePlayer();
+                    if (activePlayer != null)
+                    {
+                        activePlayer.setMoveChoice(moveChoice);
+                        minimumRaise = 1;//reset minimum raise for later use
+                    }
+                    else
+                    {
+                        throw new Exception("activePlayer was null while attempting to raise in GameForm.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Your Chips: " + playerChipCount + Environment.NewLine +
+                        "Raise Amount: " + raiseAmount + Environment.NewLine + Environment.NewLine +
+                        "You do not have enough chips to raise by this much.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Your Chips: " + playerChipCount + Environment.NewLine +
+                        "Minimum Raise: " + minimumRaise + Environment.NewLine +
+                        "Raise Amount: " + raiseAmount + Environment.NewLine + Environment.NewLine +
+                        "Your raise amount must be greater than or equal to the Minimum Raise, but less than or equal to Your Chips. By raising by the Minimum Raise you will call that amount and match the current highest raise.");
+            }
         }
     }
 }

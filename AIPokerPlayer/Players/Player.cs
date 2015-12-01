@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using AIPokerPlayer.Poker.Cards;
 using AIPokerPlayer.Poker.Moves;
+using AIPokerPlayer.UI;
 
 namespace AIPokerPlayer.Players
 {
@@ -16,10 +17,12 @@ namespace AIPokerPlayer.Players
         int chipsInCurrentPot;
         int positionOnBoard;
         private string name;
-        List<Card> playerHand; // the player's two cards held in their hand
+        protected List<Card> playerHand; // the player's two cards held in their hand
+        Move moveChoice;
 
         public Player(string name, int startingChipCount, int position)
         {
+            moveChoice = null;
             this.chipCount = startingChipCount;
             this.name = name;
             positionOnBoard = position;
@@ -30,6 +33,8 @@ namespace AIPokerPlayer.Players
         // get the player's decision for their next move
         public abstract Move requestAction(List<Move> possibleMoves);
 
+        public Move getMoveChoice() { return moveChoice; }
+        public void setMoveChoice(Move m) { moveChoice = m; }
 
         // returns the player's hand
         public List<Card> getPlayerHand()

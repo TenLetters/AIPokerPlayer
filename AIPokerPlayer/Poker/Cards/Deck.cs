@@ -21,6 +21,7 @@ namespace AIPokerPlayer.Poker.Cards
         public Deck()
         {
             // put all of the cards into the deck in order
+            deck = new List<Card>();
             createOrderedDeck();
             shuffle();
             stateOfGame = 0;
@@ -57,7 +58,6 @@ namespace AIPokerPlayer.Poker.Cards
         // reset the currentIndex to 0
         private void shuffleDeck(Random random)
         {
-<<<<<<< HEAD
             int n = deck.Count;
 
             for(int i = 0; i < n; i++)
@@ -66,18 +66,7 @@ namespace AIPokerPlayer.Poker.Cards
                 Card card = deck[r];
                 deck[r] = deck[i];
                 deck[i] = card;
-=======
-            List<Card> tmpDeck = new List<Card>();
-            int orderedDeckSize = deck.Count;
-            for (int i = 0; orderedDeckSize > 0; i++)
-            {
-                int randomNumber = random.Next(0, orderedDeckSize - 1); //52 cards in our deck
-                tmpDeck.Add(deck[randomNumber]);
-                deck.RemoveAt(randomNumber);
-                orderedDeckSize = deck.Count;
->>>>>>> middle59-master
             }
-            deck = tmpDeck;
             currentIndex = 0;
         }
 

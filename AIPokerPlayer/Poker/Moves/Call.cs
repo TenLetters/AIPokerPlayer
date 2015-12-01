@@ -19,5 +19,11 @@ namespace AIPokerPlayer.Poker.Moves
         {
             return callAmount;
         }
+
+        public override String toString()
+        {
+            String s = "Call";
+            return s;
+        }
     }
 }
