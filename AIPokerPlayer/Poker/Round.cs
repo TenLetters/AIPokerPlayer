@@ -47,7 +47,7 @@ namespace AIPokerPlayer.Poker
 
             // each round has 4 possible betting sessions : pre-flop, post-flop, post-turn, post-river
             for(int i = 0; i < 4; i++)
-            {
+            { 
                 // check to make sure there is atleast 2 players who havent folded yet or else we have a winner
                 int remainingPlayers = players.Count - foldedPlayersPositions.Count;
                 if (remainingPlayers > 1)
@@ -186,8 +186,6 @@ namespace AIPokerPlayer.Poker
 
                     //Slow down during AI turns
                     System.Threading.Thread.Sleep(DELAY_SPEED);
-
-                    System.Threading.Thread.Sleep(1000);
 
                     // check possible moves for the player
                     List<Move> possibleMoves = new List<Move>();

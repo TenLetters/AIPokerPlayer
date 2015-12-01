@@ -226,8 +226,7 @@ namespace AIPokerPlayer.Players
             // again we will use isOurHandLiklyBetterThanAnyOtherPlayers to determine if our hand is better and we will bet accordingly
             // here we must again consider bluffing and our aggression level based on relative chip count(our compared to the players at the table)
         }
-
-
     }
+
 }
 
