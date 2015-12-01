@@ -71,7 +71,7 @@ namespace AIPokerPlayer
         public String[] getPlayerList() { return playerList; }
         /*
         *   Cycles through TextBoxes and radio buttons to gather player name data, and player type
-        *   Returns: void
+        *   Returns: 
         */
         public void setPlayerList()
         {
@@ -86,40 +86,53 @@ namespace AIPokerPlayer
                         playerList[i] = "Human";
                     }
                 }
+
         }
 
         /*
         *   Finalizes all the settings that will be passed on, by re-updating all of our lists.
-        *   Returns: void
+        *   Returns: boolean - true if everything is OK, false if there was an issue, do not start
         */
-        private void finalizeSettings()
+        private Boolean finalizeSettings()
         {
+            Boolean valid = true;
+            int nonemptyCount = 0;
             setStartingChips();
             setPlayerList();
+
+            
             Player tmpPlayer;
 
-            for(int i = 0; i < MAX_PLAYER_COUNT; i++)
+                for (int i = 0; i < MAX_PLAYER_COUNT; i++)
+                {
+                    tmpPlayer = null;
+
+                    if (playerList[i].Equals("Human"))
+                    {
+                        tmpPlayer = new HumanPlayer(playerNameList[i], startingChips, i);
+                    }
+                    else if (playerList[i].Equals("AI"))
+                    {
+                        tmpPlayer = new AIPlayer(playerNameList[i], startingChips, i);
+                    }
+                    else
+                    {
+                        //slot was empty, don't add anything to our list
+                    }
+
+                    if (tmpPlayer != null)
+                    {
+                        nonemptyCount++;
+                        players.Add(tmpPlayer);
+                    }
+                }
+            if (nonemptyCount < 2)
             {
-                tmpPlayer = null;
-
-                if(playerList[i].Equals("Human"))
-                {
-                    tmpPlayer = new HumanPlayer(playerNameList[i], startingChips, i);
-                }
-                else if (playerList[i].Equals("AI"))
-                {
-                    tmpPlayer = new AIPlayer(playerNameList[i], startingChips, i);
-                }
-                else
-                {
-                    //slot was empty, don't add anything to our list
-                }
-
-                if(tmpPlayer != null)
-                {
-                    players.Add(tmpPlayer);
-                }
+                valid = false;
+                MessageBox.Show("You must select atleast 2 players to play the game.");
             }
+
+            return valid;
         }
 
         /*
@@ -129,10 +142,14 @@ namespace AIPokerPlayer
         */
         private void StartGame_Click(object sender, EventArgs e)
         {
-            finalizeSettings();
-            this.Hide();
-            //Pass 'this' to the next controller object
-            Game game = new Game(players);  
+            Boolean valid = false;
+            valid = finalizeSettings();
+            if (valid)
+            {
+                this.Hide();
+                //Pass 'this' to the next controller object
+                Game game = new Game(players);
+            }
         }
 
         //Player One Radio Events
