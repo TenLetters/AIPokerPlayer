@@ -207,6 +207,7 @@ namespace AIPokerPlayer.Poker
                     // minimum raise amount is 1 chip (current leading contribution - player contribution = call amount; must have at least that many chips to raise)
                     if (players[i].getChipCount() > (highestChipsInPot - players[i].getChipsInCurrentPot()))
                         possibleMoves.Add(new Raise(highestChipsInPot - players[i].getChipsInCurrentPot()));
+
                     // can only call if your chips > 0 and your contribution != max
                     if (players[i].getChipCount() > 0 && players[i].getChipsInCurrentPot() != highestChipsInPot)
                     {
@@ -217,9 +218,11 @@ namespace AIPokerPlayer.Poker
                             callAmount = players[i].getChipCount();
                         possibleMoves.Add(new Call(callAmount));
                     }
-                    // can only check if your chips in pot = maximum contribution
-                    if (players[i].getChipsInCurrentPot() == highestChipsInPot)
+                    // can only check if you cannot call ((chips != maximum || chips == maximum) and chips == 0)
+                    else
+                    {
                         possibleMoves.Add(new Check());
+                    }
 
                     // Update the UI with the possible moves for the player
                     gameForm.setAvailableButtons(possibleMoves);
