@@ -70,17 +70,22 @@ namespace AIPokerPlayer.Poker
                     break;
             }
 
+
+            // determine the winner of this round after all rounds have finished or only 1 person has not folded
+            Player winner = determineWinner(players, foldedPlayersPositions);
             // reset all chip contributions to the pot for this round to 0
             foreach(Player player in players)
             {
                 player.resetChipsInCurrentPot();
+                if (player is AIPlayer)
+                    {
+                        ((AIPlayer)player).learnAndCleanUp(winner);
+                    }
             }
 
             //Round is over, reveal all player hands
             gameForm.appendHistory(playerHandString);
 
-            // determine the winner of this round after all rounds have finished or only 1 person has not folded
-            Player winner = determineWinner(players, foldedPlayersPositions);
             winner.modifyChipCount(potAmount);
 
             //Update our history with the round winner information
