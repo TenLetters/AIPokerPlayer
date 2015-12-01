@@ -77,6 +77,10 @@ namespace AIPokerPlayer.Players
             //call appropriate action method based on where we are in the round
         }
 
+        public void resetRoundCounter()
+        {
+            round = 0;
+        }
 
         /// <summary>
         /// Returns the pre-flop action for round = 0, post-flop action for round = 1 || round = 2, and post-river action for round =3
