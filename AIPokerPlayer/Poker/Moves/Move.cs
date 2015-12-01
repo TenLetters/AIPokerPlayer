@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace AIPokerPlayer.Poker.Moves
 {
-    public class Move
+    public abstract class Move
     {
+        abstract public String toString();
     }
 }

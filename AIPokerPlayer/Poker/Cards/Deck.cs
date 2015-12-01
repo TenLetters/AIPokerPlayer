@@ -21,6 +21,7 @@ namespace AIPokerPlayer.Poker.Cards
         public Deck()
         {
             // put all of the cards into the deck in order
+            deck = new List<Card>();
             createOrderedDeck();
             shuffle();
             stateOfGame = 0;
@@ -67,8 +68,9 @@ namespace AIPokerPlayer.Poker.Cards
                 Card card = deck[r];
                 deck[r] = deck[i];
                 deck[i] = card;
-
             }
+            currentIndex = 0;
+            
         }
 
         // returns the next n cards from the top of the deck
