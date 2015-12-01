@@ -296,8 +296,9 @@ namespace AIPokerPlayer.Poker
                     {
                         break;
                     }
+
                     // if we still have more moves to make but are at the end of the player list, reset the index to -1 (incremented to 0 at start 
-                    if (turnsTaken < remainingPlayers && i == players.Count - 1)
+                    if (turnsTaken < remainingPlayers && i >= players.Count - 1)
                         i = -1;
                     else if (turnsTaken == remainingPlayers)
                         break;

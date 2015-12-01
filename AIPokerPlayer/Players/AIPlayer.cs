@@ -286,7 +286,7 @@ namespace AIPokerPlayer.Players
                     return new Check();
                 }
                 // if the call is a small percentage of our chips then make it
-                else if(canCall && getChipCount()/callAmount < .05)
+                else if(canCall && getChipCount()/callAmount > 20)
                 {
                     return new Call(callAmount);
                 }
