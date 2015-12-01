@@ -45,8 +45,17 @@ namespace AIPokerPlayer.Poker
             dealStartingHands(players, deck);
 
 
+            //Create the string we show at the end for player hands
+            String playerHandString = Environment.NewLine +  "****Player Hands****";
+            foreach(Player p in players)
+            {
+                playerHandString += Environment.NewLine + p.getName() + Environment.NewLine +
+                    p.getPlayerHand()[0].toString() + ", " + p.getPlayerHand()[1].toString() + Environment.NewLine;
+            }
+            playerHandString += "****End of Player Hands****";
+
             // each round has 4 possible betting sessions : pre-flop, post-flop, post-turn, post-river
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             { 
                 // check to make sure there is atleast 2 players who havent folded yet or else we have a winner
                 int remainingPlayers = players.Count - foldedPlayersPositions.Count;
@@ -66,6 +75,9 @@ namespace AIPokerPlayer.Poker
             {
                 player.resetChipsInCurrentPot();
             }
+
+            //Round is over, reveal all player hands
+            gameForm.appendHistory(playerHandString);
 
             // determine the winner of this round after all rounds have finished or only 1 person has not folded
             Player winner = determineWinner(players, foldedPlayersPositions);
@@ -263,6 +275,10 @@ namespace AIPokerPlayer.Poker
                     gameForm.updatePlayerChipCount(players[i]);
                     gameForm.setPotTotal(potAmount);
 
+                    if((players.Count-foldedPlayersPositions.Count) <= 1)
+                    {
+                        break;
+                    }
                     // if we still have more moves to make but are at the end of the player list, reset the index to -1 (incremented to 0 at start 
                     if (turnsTaken < remainingPlayers && i == players.Count - 1)
                         i = -1;
