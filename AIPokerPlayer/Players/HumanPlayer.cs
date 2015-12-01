@@ -1,4 +1,5 @@
-﻿using AIPokerPlayer.Poker.Moves;
+﻿using AIPokerPlayer.Poker.Cards;
+using AIPokerPlayer.Poker.Moves;
 using AIPokerPlayer.UI;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,17 @@ namespace AIPokerPlayer.Players
     // Written by Alex Ciaramella
     class HumanPlayer : Player
     {
-
         public HumanPlayer(string name, int startingChipCount, int position) : base(name, startingChipCount, position)
         { }
         
         public override Move requestAction(List<Move> possibleMoves)
         {
-            throw new NotImplementedException();
+            while(getMoveChoice() == null)
+            {
+                //wait for user input
+                //should we sleep a small bit?
+            }
+            return getMoveChoice();
         }
     }
 }

@@ -8,5 +8,10 @@ namespace AIPokerPlayer.Poker.Moves
 {
     class Fold : Move
     {
+        public override String toString()
+        {
+            String s = "Fold";
+            return s;
+        }
     }
 }

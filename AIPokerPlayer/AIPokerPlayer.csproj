@@ -60,6 +60,7 @@
     <Compile Include="Poker\Moves\Move.cs" />
     <Compile Include="Poker\Moves\Raise.cs" />
     <Compile Include="Poker\Round.cs" />
+    <Compile Include="preFlopMultiplierValues.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

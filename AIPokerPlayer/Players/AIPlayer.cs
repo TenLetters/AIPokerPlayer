@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AIPokerPlayer.Poker.Cards;
 using AIPokerPlayer.Poker.Moves;
+using AIPokerPlayer.UI;
 
 namespace AIPokerPlayer.Players
 {
@@ -105,7 +106,7 @@ namespace AIPokerPlayer.Players
 
         public override Move requestAction(List<Move> possibleMoves)
         {
-            throw new NotImplementedException();
+            return null;
             //call appropriate action method based on where we are in the round
         }
     }
